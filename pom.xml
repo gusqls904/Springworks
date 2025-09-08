@@ -57,7 +57,7 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>3.3.3</version>
         </dependency>
-
+        
         <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
