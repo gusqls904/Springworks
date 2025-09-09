@@ -1,9 +1,9 @@
 spring:
   datasource:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://localhost:3306/sas?serverTimezone=UTC&characterEncoding=utf8&allowMultiQueries=true&autoReconnect=true&socketTimeout=30000
-      username: sas
-      password: sas1!
+      url: jdbc:mariadb://localhost:3306/STUDY?serverTimezone=UTC&characterEncoding=utf8&allowMultiQueries=true&autoReconnect=true&socketTimeout=30000
+      username: STUDY
+      password: STUDY1!
 
 #  jpa:
 #    hibernate:
