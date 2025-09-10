@@ -9,12 +9,15 @@ public class WebConfig implements WebMvcConfigurer {
     
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // SPA 라우팅을 위한 설정
-        registry.addViewController("/{spring:\\w+}")
+        // 기존 index.html 설정
+        registry.addViewController("/").setViewName("forward:/index.html");
+        registry.addViewController("/{path:^(?!.*\\.).*$}")
                 .setViewName("forward:/index.html");
-        registry.addViewController("/**/{spring:\\w+}")
+        registry.addViewController("/**/{path:^(?!.*\\.).*$}")
                 .setViewName("forward:/index.html");
-        registry.addViewController("/{spring:\\w+}/**{spring:?!(\\.js|\\.css)$}")
-                .setViewName("forward:/index.html");
+        
+        // logout.html에 대한 설정 수정
+        registry.addViewController("/ap/sas/logout.html")
+                .setViewName("forward:/logout.html");
     }
 }
