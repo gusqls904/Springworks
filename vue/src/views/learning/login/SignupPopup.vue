@@ -11,13 +11,23 @@
     <form @submit.prevent="handleSignup" class="signup-form">
       <div class="form-group">
         <label for="signup-userId">사용자 ID <span class="required">*</span></label>
-        <input
-          type="text"
-          id="signup-userId"
-          v-model="signupForm.userId"
-          placeholder="아이디를 입력해주세요"
-          required
-        >
+        <div class="input-with-button">
+          <input
+            type="text"
+            id="signup-userId"
+            v-model="signupForm.userId"
+            placeholder="아이디를 입력해주세요"
+            required
+          >
+          <button 
+            type="button" 
+            class="btn-check-duplicate" 
+            @click="checkUserIdDuplicate"
+            :disabled="!signupForm.userId.trim() || isChecking"
+          >
+            {{ isChecking ? '확인중...' : '중복확인' }}
+          </button>
+        </div>
       </div>
       
       <div class="form-group">
@@ -88,17 +98,27 @@
       </button>
     </template>
   </BasePopup>
+  
+  <AlertPopup
+    :visible="alertVisible"
+    @update:visible="alertVisible = $event"
+    :title="alertTitle"
+    :message="alertMessage"
+    :type="alertType"
+  />
 </template>
 
 <script>
 import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
+import AlertPopup from '../../../components/AlertPopup.vue'
 import { apiCall } from '/src/util/api.js'
 
 export default {
   name: 'SignupPopup',
   components: {
-    BasePopup
+    BasePopup,
+    AlertPopup
   },
   props: {
     visible: {
@@ -147,14 +167,31 @@ export default {
       isLoading.value = false
     }
     
+    // Alert 상태
+    const alertVisible = ref(false)
+    const alertTitle = ref('알림')
+    const alertMessage = ref('')
+    const alertType = ref('info')
+    
+    const isChecking = ref(false)
+    const userIdChecked = ref(false)
+    
+    // Alert 표시 함수
+    const showAlert = (message, type = 'info', title = '알림') => {
+      alertMessage.value = message
+      alertType.value = type
+      alertTitle.value = title
+      alertVisible.value = true
+    }
+    
     const handleSignup = async () => {
       if (!isFormValid.value) {
-        alert('모든 필수 필드를 올바르게 입력해주세요.')
+        showAlert('모든 필수 필드를 올바르게 입력해주세요.', 'warning')
         return
       }
       
       if (signupForm.value.password !== signupForm.value.passwordConfirm) {
-        alert('비밀번호가 일치하지 않습니다.')
+        showAlert('비밀번호가 일치하지 않습니다.', 'warning')
         return
       }
       
@@ -166,30 +203,23 @@ export default {
           userId: signupForm.value.userId,
           userName: signupForm.value.userName,
           password: signupForm.value.password,
-          email: signupForm.value.email || null, // 빈 문자열이면 null로 전송
+          email: signupForm.value.email || null,
           userRole: signupForm.value.userRole,
           isActive: '1'
         }
         
-        console.log('회원가입 요청 데이터:', signupData)
-        
-        // API 직접 호출
         const response = await apiCall('/user/signup', signupData, 'POST')
-        
-        console.log('회원가입 성공:', response)
         
         // 성공 이벤트 발생
         emit('signup', response)
         
         // 성공 메시지 표시
-        alert('회원가입이 완료되었습니다.')
+        showAlert('회원가입이 완료되었습니다.', 'success')
         
         // 팝업 닫기
         handleClose()
         
       } catch (error) {
-        console.error('회원가입 실패:', error)
-        
         // 에러 메시지 처리
         let errorMessage = '회원가입 중 오류가 발생했습니다.'
         
@@ -199,7 +229,7 @@ export default {
           errorMessage = error.message
         }
         
-        alert(errorMessage)
+        showAlert(errorMessage, 'error')
         
       } finally {
         isLoading.value = false
@@ -211,13 +241,56 @@ export default {
       emit('close')
     }
     
+    // 사용자 ID 중복확인
+    const checkUserIdDuplicate = async () => {
+      const userId = signupForm.value.userId.trim()
+      if (!userId) {
+        showAlert('아이디를 입력해주세요.', 'warning')
+        return
+      }
+      // 간단한 형식 검증 (영문/숫자/밑줄, 4~20자)
+      if (!/^[a-zA-Z0-9_]{4,20}$/.test(userId)) {
+        showAlert('아이디는 영문/숫자/밑줄로 4~20자여야 합니다.', 'warning')
+        return
+      }
+
+      try {
+        isChecking.value = true
+        userIdChecked.value = false
+
+        // API 호출 (응답 구조에 맞게 duplicate/available 둘 다 처리)
+        const res = await apiCall('/user/checkUserId', { userId }, 'POST')
+        const duplicate = res?.duplicate ?? (res?.available === false)
+        if (duplicate) {
+          showAlert('이미 사용 중인 아이디입니다.', 'warning')
+          userIdChecked.value = false
+        } else {
+          showAlert('사용 가능한 아이디입니다.', 'success')
+          userIdChecked.value = true
+        }
+      } catch (e) {
+        showAlert('중복확인 중 오류가 발생했습니다.', 'error')
+      } finally {
+        isChecking.value = false
+      }
+    }
+    
     return {
       signupForm,
       isLoading,
       isFormValid,
       handleSignup,
-      handleClose
+      handleClose,
+      alertVisible,
+      alertTitle,
+      alertMessage,
+      alertType,
+      showAlert,
+      isChecking,
+      userIdChecked,
+      checkUserIdDuplicate
     }
+    
   }
 }
 </script>
@@ -266,63 +339,6 @@ export default {
   background-color: white;
 }
 
-.checkbox-group {
-  margin-bottom: 16px;
-}
-
-.checkbox-wrapper {
-  display: flex;
-  align-items: flex-start;
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.checkbox-wrapper input[type="checkbox"] {
-  display: none;
-}
-
-.checkmark {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #d1d5db;
-  border-radius: 4px;
-  margin-right: 12px;
-  margin-top: 2px;
-  position: relative;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.checkbox-wrapper input[type="checkbox"]:checked + .checkmark {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
-}
-
-.checkbox-wrapper input[type="checkbox"]:checked + .checkmark::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.checkbox-text {
-  color: #6b7280;
-}
-
-.terms-link {
-  color: #3b82f6;
-  text-decoration: none;
-}
-
-.terms-link:hover {
-  text-decoration: underline;
-}
-
 .btn {
   padding: 12px 24px;
   border-radius: 8px;
@@ -355,6 +371,39 @@ export default {
 .btn-primary:disabled {
   background: #9ca3af;
   cursor: not-allowed;
+}
+
+.input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-with-button input {
+  flex-grow: 1;
+}
+
+.btn-check-duplicate {
+  padding: 12px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-check-duplicate:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.btn-check-duplicate:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* 반응형 */

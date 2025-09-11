@@ -10,8 +10,6 @@ import com.study.work.learning.user.dto.UserDTO;
 import com.study.work.learning.user.svc.UserSVC;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -21,16 +19,18 @@ public class UserCTL {
 
     @Autowired
     private UserSVC userSVC;
+    
+    @Operation(summary = "아이디 중복체크", description = "사용자의 아이디의 중복체크를 진행합니다.")
+    @PostMapping("/checkUserId")
+    public void checkUserId(@RequestBody UserDTO userDto) {
+    	/**
+    	 * TODO
+    	 */
+        
+    }
+    
 
-    /**
-     * 회원가입 API
-     */
     @Operation(summary = "회원가입", description = "사용자가 입력한 정보로 회원가입을 진행합니다.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "회원가입 성공"),
-        @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
-        @ApiResponse(responseCode = "500", description = "서버 오류")
-    })
     @PostMapping("/signup")
     public void signup(@RequestBody UserDTO userDto) {
         userSVC.signup(userDto);
