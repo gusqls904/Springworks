@@ -19,7 +19,7 @@
 		    , CREATED_DTTM
 		    , UPDATED_DTTM
 		    , IS_ACTIVE
-		    ) VALUES (
+	    ) VALUES (
 		      #{userId}
 		    , #{userName}
 		    , #{password}
