@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.study.work.learning.user.dao.UserDAO">
+
+	<insert id="insertUser" parameterType="com.study.work.learning.user.dto.UserDTO">
+		/**
+		* SQL ID : com.study.work.learning.user.dao.UserDAO.insertUser
+		* SQL 명: 사용자 등록
+		*/
+		INSERT INTO TB_USER (
+		      USER_ID
+		    , USER_NAME
+		    , PASSWORD
+		    , EMAIL
+		    , USR_ROLE
+		    , CREATED_DTTM
+		    , UPDATED_DTTM
+		    , IS_ACTIVE
+		    ) VALUES (
+		      #{userId}
+		    , #{userName}
+		    , #{password}
+		    , #{email}
+		    , #{userRole}
+		    , CURRENT_TIMESTAMP()
+		    , CURRENT_TIMESTAMP()
+		    , #{isActive}
+		);
+	</insert>
+
+</mapper>
