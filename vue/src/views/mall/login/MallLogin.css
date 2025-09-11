@@ -1,0 +1,399 @@
+/* 기존 Login.css의 스타일을 상속하고 추가 스타일 정의 */
+* {font-family:'Roboto','Noto Sans KR',sans-serif;letter-spacing:-.2px;margin:0;padding:0;box-sizing:border-box;}
+.eng,.eng * {font-family:'PT Serif','Roboto','Noto Sans KR',sans-serif;letter-spacing:0;}
+.upper,.upper * {text-transform:uppercase;}
+i {font-family:Font Awesome\ 5 Free !important;}
+.fab {font-family:Font Awesome\ 5 Brands !important;}
+.col1 {color:#be9d76;}
+.col1:hover {color:#be9d76;}
+.col1bg {background-color:#be9d76;}
+.col1hov:hover {color:#be9d76;}
+.flex {display:flex !important;flex-wrap:nowrap;}
+.mdlX {position:absolute;left:50%;-webkit-transform:translate(-50%,0);-ms-transform:translate(-50%,0);transform:translate(-50%,0);}
+.mdlY {position:absolute;top:50%;-webkit-transform:translate(0,-50%);-ms-transform:translate(0,-50%);transform:translate(0,-50%);}
+.mdlXY {position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);}
+.disnone {display:none !important;}
+.elp {text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow:hidden;white-space:nowrap;word-wrap:normal !important;}
+.mov03 {-webkit-transition:all 0.3s;-khtml-transition:all 0.3s ease;-moz-transition:all 0.3s;-ms-transition:all 0.3s;-o-transition:all 0.3s;transition:all 0.3s;}
+.mov07 {-webkit-transition:all 0.7s;-khtml-transition:all 0.7s ease;-moz-transition:all 0.7s;-ms-transition:all 0.7s;-o-transition:all 0.7s;transition:all 0.7s;}
+
+/* MallLogin 전용 스타일 - 클래스명 충돌 방지 */
+.mall-login-page {
+  background: #f8f6f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mall-login_container {
+  position: relative;
+  overflow: hidden;
+}
+
+.mall-login_container > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.mall-login_left {
+  position: relative;
+  z-index: 1;
+}
+
+.mall-login_container {
+  background: white;
+  border-radius: 0;
+  box-shadow: 0 0 0;
+  overflow: hidden;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.mall-login_left {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 500px;
+  padding: 60px 50px;
+  background: #faf8f3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border: 1px solid #e8e4dc;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  margin: 0 20px;
+}
+
+.mall-login_content {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+/* 뒤로가기 버튼 */
+.mall-back_btn {
+  display: flex;
+  align-items: center;
+  color: #8b7355;
+  font-size: 14px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.mall-back_btn:hover {
+  color: #6b5b47;
+}
+
+.mall-back_btn i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.mall-login_title {
+  font-size: 32px;
+  font-weight: 300;
+  letter-spacing: -0.06em;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  color: #8b7355;
+  text-align: center;
+}
+
+.mall-login_subtitle {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: #a68b5f;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* 폼 스타일 */
+.mall-login_form {
+  margin-bottom: 30px;
+}
+
+.mall-form_group {
+  margin-bottom: 20px;
+}
+
+.mall-form_group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #8b7355;
+}
+
+.mall-form_group input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #d4c4a8;
+  border-radius: 0;
+  font-size: 15px;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.mall-form_group input:focus {
+  border-color: #8b7355;
+  box-shadow: none;
+  border-width: 2px;
+  outline: none;
+}
+
+.mall-form_group input::placeholder {
+  color: #999;
+}
+
+/* 폼 옵션 */
+.mall-form_options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.mall-checkbox_wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #8b7355;
+}
+
+.mall-checkbox_wrapper input[type="checkbox"] {
+  display: none;
+}
+
+.mall-checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d4c4a8;
+  border-radius: 0;
+  margin-right: 8px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.mall-checkbox_wrapper input[type="checkbox"]:checked + .mall-checkmark {
+  background-color: #8b7355;
+  border-color: #8b7355;
+}
+
+.mall-checkbox_wrapper input[type="checkbox"]:checked + .mall-checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.mall-forgot_password {
+  color: #8b7355;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.mall-forgot_password:hover {
+  color: #6b5b47;
+  text-decoration: none;
+}
+
+/* 로그인 버튼 */
+.mall-login_btn.mall-primary {
+  width: 100%;
+  padding: 16px;
+  background: #8b7355;
+  border: 2px solid #8b7355;
+  color: white;
+  font-size: 15px;
+  font-weight: 400;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
+  letter-spacing: -0.5px;
+}
+
+.mall-login_btn.mall-primary:hover {
+  background: #6b5b47;
+  border-color: #6b5b47;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 구분선 */
+.mall-divider {
+  position: relative;
+  text-align: center;
+  margin: 25px 0;
+}
+
+.mall-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #d4c4a8;
+}
+
+.mall-divider span {
+  background: #faf8f3;
+  padding: 0 20px;
+  color: #a68b5f;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 소셜 로그인 */
+.mall-login_social {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.mall-login_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border: 1px solid #d4c4a8;
+  border-radius: 0;
+  text-decoration: none;
+  color: #8b7355;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  background: #fff;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+}
+
+.mall-login_btn:hover {
+  border-color: #8b7355;
+  background: #f8f6f0;
+  transform: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.mall-login_btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.mall-login_btn.mall-kakao {
+  background: #FEE500;
+  border-color: #FEE500;
+  color: #3c1e1e;
+}
+
+.mall-login_btn.mall-kakao:hover {
+  background: #FDD835;
+  border-color: #FDD835;
+}
+
+.mall-login_btn.mall-naver {
+  background: #26c826;
+  border-color: #26c826;
+  color: #fff;
+}
+
+.mall-login_btn.mall-naver:hover {
+  background: #22b022;
+  border-color: #22b022;
+}
+
+.mall-login_btn.mall-google {
+  background: #f4511e;
+  border-color: #f4511e;
+  color: #fff;
+}
+
+.mall-login_btn.mall-google:hover {
+  background: #e04a1b;
+  border-color: #e04a1b;
+}
+
+/* 회원가입 링크 */
+.mall-signup_link {
+  text-align: center;
+}
+
+.mall-signup_link p {
+  color: #8b7355;
+  font-size: 14px;
+}
+
+.mall-signup_link a {
+  color: #8b7355;
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.mall-signup_link a:hover {
+  color: #6b5b47;
+  text-decoration: none;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .mall-login_container {
+    padding: 20px;
+  }
+
+  .mall-login_left {
+    padding: 40px 30px;
+    margin: 0 10px;
+    border-radius: 10px;
+  }
+
+  .mall-login_title {
+    font-size: 28px;
+  }
+
+  .mall-form_options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mall-login_left {
+    padding: 30px 20px;
+    margin: 0 5px;
+  }
+
+  .mall-login_title {
+    font-size: 24px;
+  }
+
+  .mall-login_subtitle {
+    font-size: 14px;
+  }
+}
