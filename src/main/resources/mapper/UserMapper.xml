@@ -28,7 +28,7 @@
 		    , CURRENT_TIMESTAMP()
 		    , CURRENT_TIMESTAMP()
 		    , #{isActive}
-		);
+		)
 	</insert>
 
 </mapper>
