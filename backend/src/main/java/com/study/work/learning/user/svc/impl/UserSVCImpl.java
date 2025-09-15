@@ -18,8 +18,19 @@ public class UserSVCImpl implements UserSVC{
 		// TODO Auto-generated method stub
 		
 		userDAO.insertUser(userDto);
+	}
+
+	@Override
+	public boolean checkUserId(String userId) {
+		// TODO Auto-generated method stub
 		
-		
+		// 3번
+		if(userDAO.selectCountUserId(userId) > 0) {
+			// 5-1번
+			return true;
+		};
+		// 5-2번
+		return false;
 	}
 
 }

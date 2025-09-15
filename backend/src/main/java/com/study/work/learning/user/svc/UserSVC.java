@@ -6,5 +6,8 @@ public interface UserSVC {
 
 	void signup(UserDTO userDto);
 
+	// 2번
+	boolean checkUserId(String userId);
+
 }
 

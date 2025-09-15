@@ -30,5 +30,16 @@
 		    , #{isActive}
 		)
 	</insert>
+	
+	<!-- 5번 -->
+	<select id="selectCountUserId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		/**
+		* SQL ID : com.study.work.learning.user.dao.UserDAO.selectCountUserId
+		* SQL 명: 사용자 아이디 개수 조회
+		*/
+		SELECT COUNT(*)
+		FROM TB_USER
+		WHERE USER_ID = #{userId}
+	</select>
 
 </mapper>

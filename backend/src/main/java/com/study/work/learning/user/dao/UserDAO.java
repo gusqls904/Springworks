@@ -9,6 +9,9 @@ import com.study.work.learning.user.dto.UserDTO;
 public interface UserDAO {
 
 	void insertUser(UserDTO userDto);
+
+	// 4번
+	int selectCountUserId(String userId);
     
 
 }
