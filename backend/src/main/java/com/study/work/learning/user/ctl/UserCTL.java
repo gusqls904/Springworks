@@ -1,15 +1,14 @@
 package com.study.work.learning.user.ctl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.study.work.learning.user.dto.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.study.work.learning.user.dto.UserDTO;
 import com.study.work.learning.user.svc.UserSVC;
@@ -70,4 +69,12 @@ public class UserCTL {
         
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
+    @PostMapping("/getRoleList")
+    public ResponseEntity<List<RoleDTO>> getRoles() {
+        List<RoleDTO> roles = userSVC.getRoleList();
+        return ResponseEntity.ok(roles);
+    }
+
 }

@@ -42,4 +42,15 @@
 		WHERE USER_ID = #{userId}
 	</select>
 
+
+    <select id="getRoleList" resultType="com.study.work.learning.user.dto.RoleDTO">
+        SELECT ROLE_ID as roleId,
+        ROLE_NAME as roleName
+        FROM TB_ROLE
+    </select>
+
+
+
+
+
 </mapper>

@@ -1,6 +1,9 @@
 package com.study.work.learning.user.svc;
 
+import com.study.work.learning.user.dto.RoleDTO;
 import com.study.work.learning.user.dto.UserDTO;
+
+import java.util.List;
 
 public interface UserSVC {
 
@@ -9,5 +12,6 @@ public interface UserSVC {
 	// 2번
 	boolean checkUserId(String userId);
 
+    List<RoleDTO> getRoleList();
 }
 
