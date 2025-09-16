@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
 import AlertPopup from '../../../components/AlertPopup.vue'
 import { apiCall } from '/src/util/api.js'
@@ -162,17 +162,14 @@ export default {
              signupForm.value.password === signupForm.value.passwordConfirm
     })
     
-
-    /**
-     * 팝업이 열릴 때
-     */
-    watch(() => props.visible, (newVal) => {
-      if (newVal) {
-        loadRoleList()
-      } else {
-        resetForm()
-      }
-    })
+    // Alert 상태
+    const alertVisible = ref(false)
+    const alertTitle = ref('알림')
+    const alertMessage = ref('')
+    const alertType = ref('info')
+    
+    const isChecking = ref(false)
+    const userIdChecked = ref(false)
     
     const resetForm = () => {
       signupForm.value = {
@@ -187,14 +184,24 @@ export default {
     }
     
     /**
+     * 팝업이 열릴 때
+     */
+    watch(() => props.visible, (newVal) => {
+      if (newVal) {
+        loadRoleList()
+      } else {
+        resetForm()
+      }
+    })
+    
+    /**
      * 역할 목록 로드
-     */ 
+     */
     const loadRoleList = async () => {
       try {
         isLoadingRoles.value = true
         const response = await apiCall('/user/getRoleList', {}, 'POST')
         
-        // API 응답에 따라 역할 목록 설정
         if (response && Array.isArray(response)) {
           roleList.value = response.map(role => ({
             value: role.roleId,
@@ -205,34 +212,52 @@ export default {
             value: role.roleId,
             label: role.roleName
           }))
-        } else {
-          
         }
       } catch (error) {
         console.error('역할 목록 로드 실패:', error)
-
       } finally {
         isLoadingRoles.value = false
       }
     }
     
-    // Alert 상태
-    const alertVisible = ref(false)
-    const alertTitle = ref('알림')
-    const alertMessage = ref('')
-    const alertType = ref('info')
-    
-    const isChecking = ref(false)
-    const userIdChecked = ref(false)
-    
-    // Alert 표시 함수
-    const showAlert = (message, type = 'info', title = '알림') => {
-      alertMessage.value = message
-      alertType.value = type
-      alertTitle.value = title
-      alertVisible.value = true
+    /**
+     * 사용자 ID 중복확인
+     */
+    const checkUserIdDuplicate = async () => {
+      const userId = signupForm.value.userId.trim()
+      if (!userId) {
+        showAlert('아이디를 입력해주세요.', 'warning')
+        return
+      }
+      
+      if (!/^[a-zA-Z0-9_]{4,20}$/.test(userId)) {
+        showAlert('아이디는 영문/숫자/밑줄로 4~20자여야 합니다.', 'warning')
+        return
+      }
+
+      try {
+        isChecking.value = true
+        userIdChecked.value = false
+
+        const res = await apiCall('/user/checkUserId', { userId }, 'POST')
+        const duplicate = res?.duplicate ?? (res?.available === false)
+        if (duplicate) {
+          showAlert('이미 사용 중인 아이디입니다.', 'warning')
+          userIdChecked.value = false
+        } else {
+          showAlert('사용 가능한 아이디입니다.', 'success')
+          userIdChecked.value = true
+        }
+      } catch (e) {
+        showAlert('중복확인 중 오류가 발생했습니다.', 'error')
+      } finally {
+        isChecking.value = false
+      }
     }
     
+    /**
+     * 회원가입 처리
+     */
     const handleSignup = async () => {
       if (!isFormValid.value) {
         showAlert('모든 필수 필드를 올바르게 입력해주세요.', 'warning')
@@ -247,7 +272,6 @@ export default {
       try {
         isLoading.value = true
         
-        // DTO에 맞는 데이터 구조로 변환
         const signupData = {
           userId: signupForm.value.userId,
           userName: signupForm.value.userName,
@@ -259,17 +283,11 @@ export default {
         
         const response = await apiCall('/user/signup', signupData, 'POST')
         
-        // 성공 이벤트 발생
         emit('signup', response)
-        
-        // 성공 메시지 표시
         showAlert('회원가입이 완료되었습니다.', 'success')
-        
-        // 팝업 닫기
         handleClose()
         
       } catch (error) {
-        // 에러 메시지 처리
         let errorMessage = '회원가입 중 오류가 발생했습니다.'
         
         if (error.result && error.result.message) {
@@ -285,45 +303,22 @@ export default {
       }
     }
     
+    /**
+     * 팝업 닫기
+     */
     const handleClose = () => {
       emit('update:visible', false)
       emit('close')
     }
     
     /**
-     * 사용자 ID 중복확인
-     */ 
-    const checkUserIdDuplicate = async () => {
-      const userId = signupForm.value.userId.trim()
-      if (!userId) {
-        showAlert('아이디를 입력해주세요.', 'warning')
-        return
-      }
-      // 간단한 형식 검증 (영문/숫자/밑줄, 4~20자)
-      if (!/^[a-zA-Z0-9_]{4,20}$/.test(userId)) {
-        showAlert('아이디는 영문/숫자/밑줄로 4~20자여야 합니다.', 'warning')
-        return
-      }
-
-      try {
-        isChecking.value = true
-        userIdChecked.value = false
-
-        // API 호출 (응답 구조에 맞게 duplicate/available 둘 다 처리)
-        const res = await apiCall('/user/checkUserId', { userId }, 'POST')
-        const duplicate = res?.duplicate ?? (res?.available === false)
-        if (duplicate) {
-          showAlert('이미 사용 중인 아이디입니다.', 'warning')
-          userIdChecked.value = false
-        } else {
-          showAlert('사용 가능한 아이디입니다.', 'success')
-          userIdChecked.value = true
-        }
-      } catch (e) {
-        showAlert('중복확인 중 오류가 발생했습니다.', 'error')
-      } finally {
-        isChecking.value = false
-      }
+     * Alert 표시 함수
+     */
+    const showAlert = (message, type = 'info', title = '알림') => {
+      alertMessage.value = message
+      alertType.value = type
+      alertTitle.value = title
+      alertVisible.value = true
     }
     
     return {
@@ -343,7 +338,6 @@ export default {
       userIdChecked,
       checkUserIdDuplicate
     }
-    
   }
 }
 </script>
