@@ -7,11 +7,10 @@ import java.util.List;
 
 public interface UserSVC {
 
-	void signup(UserDTO userDto);
-
-	// 2번
+	List<RoleDTO> getRoleList();
+	
 	boolean checkUserId(String userId);
-
-    List<RoleDTO> getRoleList();
+	
+	void signup(UserDTO userDto);
 }
 

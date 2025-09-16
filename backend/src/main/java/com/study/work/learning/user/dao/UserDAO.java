@@ -11,10 +11,9 @@ import java.util.List;
 @Mapper
 public interface UserDAO {
 
-	void insertUser(UserDTO userDto);
+	List<RoleDTO> getRoleList();
 
-	// 4번
 	int selectCountUserId(String userId);
 
-    List<RoleDTO> getRoleList();
+	void insertUser(UserDTO userDto);
 }
