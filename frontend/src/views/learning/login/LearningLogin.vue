@@ -91,7 +91,7 @@ export default {
     const handleLogin = () => {
       console.log('이메일 로그인:', loginForm.value)
       // 로그인 성공 후 게시판으로 이동
-      router.push('/board')
+      router.push('/learning/board')  // '/board' → '/learning/board'
     }
 
     const openSignupPopup = () => {
@@ -108,24 +108,6 @@ export default {
       // alert('회원가입이 완료되었습니다.')
     }
 
-    const handleKakaoLogin = () => {
-      console.log('카카오 로그인')
-      // 카카오 로그인 성공 후 게시판으로 이동
-      router.push('/board')
-    }
-
-    const handleNaverLogin = () => {
-      console.log('네이버 로그인')
-      // 네이버 로그인 성공 후 게시판으로 이동
-      router.push('/board')
-    }
-
-    const handleGoogleLogin = () => {
-      console.log('구글 로그인')
-      // 구글 로그인 성공 후 게시판으로 이동
-      router.push('/board')
-    }
-
     return {
       loginForm,
       rememberMe,
@@ -134,10 +116,7 @@ export default {
       handleLogin,
       openSignupPopup,
       closeSignupPopup,
-      handleSignup,
-      handleKakaoLogin,
-      handleNaverLogin,
-      handleGoogleLogin
+      handleSignup
     }
   }
 }

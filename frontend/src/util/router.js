@@ -10,20 +10,34 @@ const routes = [
     name: 'Home',
     component: Login
   },
+  
+  // Learning Routes
   {
-    path: '/learning-login',
-    name: 'LearningLogin',
-    component: LearningLogin
+    path: '/learning',
+    children: [
+      {
+        path: 'login',
+        name: 'LearningLogin',
+        component: LearningLogin
+      },
+      {
+        path: 'board',
+        name: 'LearningBoard',
+        component: LearningBoard
+      }
+    ]
   },
+  
+  // Mall Routes
   {
-    path: '/mall-login',
-    name: 'MallLogin',
-    component: MallLogin
-  },
-  {
-    path: '/board',
-    name: 'LearningBoard',
-    component: LearningBoard
+    path: '/mall',
+    children: [
+      {
+        path: 'login',
+        name: 'MallLogin',
+        component: MallLogin
+      }
+    ]
   }
 ]
 

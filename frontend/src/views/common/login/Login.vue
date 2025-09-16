@@ -47,12 +47,12 @@ export default {
 
     const goToMallLogin = () => {
       // 쇼핑몰 로그인 이동
-      router.push('/mall-login')
+      router.push('/mall/login')
     }
 
     const goToLearningLogin = () => {
       // 강의 로그인 이동
-      router.push('/learning-login')
+      router.push('/learning/login')
     }
 
     return {
