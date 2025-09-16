@@ -196,12 +196,12 @@ export default {
     
     // 게시글 상세보기
     const goToDetail = (boardId) => {
-      router.push(`/board/${boardId}`)
+      router.push(`/learning/board/${boardId}`)
     }
     
     // 글쓰기 페이지
     const goToWrite = () => {
-      router.push('/board/write')
+      router.push('/learning/board/write')
     }
     
     // 메인으로 돌아가기
