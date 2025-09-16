@@ -22,7 +22,7 @@ mybatis:
 logging:
   level:
     root: info
-    org.springframework.web: debug
+#    org.springframework.web: debug
 
 server:
   port: 8090
