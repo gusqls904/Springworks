@@ -1,0 +1,15 @@
+success:
+  200ok:
+    code: "20000000"
+    desc: "정상 처리 되었습니다."
+    status: "SUCCESS"
+
+exception:
+  notdefine:
+    code: "50000000"
+    desc: "정의되지 않은 오류가 발생했습니다."
+    status: "FAIL"
+  data_not_found:
+    code: "40400001"
+    desc: "조회 결과가 없습니다."
+    status: "FAIL"

@@ -28,5 +28,6 @@ server:
   port: 8090
   
   
-  
+error:
+  codes-file: classpath:/exception/error-codes.yml
   
