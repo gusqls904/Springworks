@@ -140,6 +140,19 @@ export default {
   },
   emits: ['update:visible', 'close', 'signup'],
   setup(props, { emit }) {
+
+    // Alert 상태
+    const alertVisible = ref(false)
+    const alertTitle = ref('알림')
+    const alertMessage = ref('')
+    const alertType = ref('info')
+    
+    const isLoading = ref(false)
+    const isLoadingRoles = ref(false)
+    const roleList = ref([])
+    const isChecking = ref(false)
+    const userIdChecked = ref(false)
+
     const signupForm = ref({
       userId: '',
       userName: '',
@@ -148,11 +161,7 @@ export default {
       email: '',
       userRole: ''
     })
-    
-    const isLoading = ref(false)
-    const isLoadingRoles = ref(false)
-    const roleList = ref([])
-    
+
     const isFormValid = computed(() => {
       return signupForm.value.userId &&
              signupForm.value.userName &&
@@ -161,15 +170,6 @@ export default {
              signupForm.value.userRole &&
              signupForm.value.password === signupForm.value.passwordConfirm
     })
-    
-    // Alert 상태
-    const alertVisible = ref(false)
-    const alertTitle = ref('알림')
-    const alertMessage = ref('')
-    const alertType = ref('info')
-    
-    const isChecking = ref(false)
-    const userIdChecked = ref(false)
     
     const resetForm = () => {
       signupForm.value = {
@@ -188,7 +188,7 @@ export default {
      */
     watch(() => props.visible, (newVal) => {
       if (newVal) {
-        loadRoleList()
+        getRoleList()
       } else {
         resetForm()
       }
@@ -197,24 +197,17 @@ export default {
     /**
      * 역할 목록 로드
      */
-    const loadRoleList = async () => {
+    const getRoleList = async () => {
       try {
         isLoadingRoles.value = true
-        const response = await apiCall('/user/getRoleList', {}, 'POST')
-        
-        if (response && Array.isArray(response)) {
-          roleList.value = response.map(role => ({
+        const res = await apiCall('/user/getRoleList', {}, 'POST')
+
+          roleList.value = res?.body.map(role => ({
             value: role.roleId,
             label: role.roleName
           }))
-        } else if (response && response.roleList) {
-          roleList.value = response.roleList.map(role => ({
-            value: role.roleId,
-            label: role.roleName
-          }))
-        }
       } catch (error) {
-        console.error('역할 목록 로드 실패:', error)
+        showAlert('오류가 발생했습니다.', 'error')
       } finally {
         isLoadingRoles.value = false
       }
@@ -240,7 +233,8 @@ export default {
         userIdChecked.value = false
 
         const res = await apiCall('/user/checkUserId', { userId }, 'POST')
-        const duplicate = res?.duplicate ?? (res?.available === false)
+        
+        const duplicate = res?.body.duplicate
         if (duplicate) {
           showAlert('이미 사용 중인 아이디입니다.', 'warning')
           userIdChecked.value = false
@@ -249,7 +243,7 @@ export default {
           userIdChecked.value = true
         }
       } catch (e) {
-        showAlert('중복확인 중 오류가 발생했습니다.', 'error')
+        showAlert('오류가 발생했습니다.', 'error')
       } finally {
         isChecking.value = false
       }
@@ -288,16 +282,7 @@ export default {
         handleClose()
         
       } catch (error) {
-        let errorMessage = '회원가입 중 오류가 발생했습니다.'
-        
-        if (error.result && error.result.message) {
-          errorMessage = error.result.message
-        } else if (error.message) {
-          errorMessage = error.message
-        }
-        
-        showAlert(errorMessage, 'error')
-        
+        showAlert('오류가 발생했습니다.', 'error')
       } finally {
         isLoading.value = false
       }
