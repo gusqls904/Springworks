@@ -5,18 +5,31 @@ import java.util.Map;
 
 import org.springframework.beans.factory.config.YamlMapFactoryBean;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 import com.study.work.common.dto.CommonResultDTO;
-import com.study.work.common.util.StringUtils;
 
+@Component
 @SuppressWarnings("unchecked")
 public class ExceptionInfoConfig {
+
+    private static ExceptionInfoConfig instance; // 정적 인스턴스
 
     private Map<String, Object> exceptionInfo;
     private CommonResultDTO successResultDto;
     private CommonResultDTO undefinedErrorResult;
 
+    public ExceptionInfoConfig() {
+        instance = this; // Bean 생성 시 static instance 세팅
+    }
+
+    public static ExceptionInfoConfig getInstance() {
+        return instance;
+    }
+
     public ExceptionInfoConfig(String filePath) {
+        instance = this;
+
         YamlMapFactoryBean yaml = new YamlMapFactoryBean();
         yaml.setResources(new ClassPathResource(filePath));
         this.exceptionInfo = yaml.getObject();
@@ -25,17 +38,17 @@ public class ExceptionInfoConfig {
         Map<String, Object> successInfos = (Map<String, Object>) exceptionInfo.get("success");
         Map<String, Object> successInfo = (Map<String, Object>) successInfos.get("200ok");
         successResultDto = new CommonResultDTO();
-        successResultDto.setCode(StringUtils.objectIfNullToEmpty(successInfo.get("code")));
-        successResultDto.setMessage(StringUtils.objectIfNullToEmpty(successInfo.get("desc")));
-        successResultDto.setStatus(StringUtils.objectIfNullToEmpty(successInfo.get("status")));
+        successResultDto.setCode(successInfo.get("code") != null ? successInfo.get("code").toString() : "");
+        successResultDto.setMessage(successInfo.get("desc") != null ? successInfo.get("desc").toString() : "");
+        successResultDto.setStatus(successInfo.get("status") != null ? successInfo.get("status").toString() : "");
 
         // Undefined Error 기본값
         Map<String, Object> exceptionInfos = (Map<String, Object>) exceptionInfo.get("exception");
         Map<String, Object> exceptionInfo1 = (Map<String, Object>) exceptionInfos.get("notdefine");
         undefinedErrorResult = new CommonResultDTO();
-        undefinedErrorResult.setCode(StringUtils.objectIfNullToEmpty(exceptionInfo1.get("code")));
-        undefinedErrorResult.setMessage(StringUtils.objectIfNullToEmpty(exceptionInfo1.get("desc")));
-        undefinedErrorResult.setStatus(StringUtils.objectIfNullToEmpty(exceptionInfo1.get("status")));
+        undefinedErrorResult.setCode(exceptionInfo1.get("code") != null ? exceptionInfo1.get("code").toString() : "");
+        undefinedErrorResult.setMessage(exceptionInfo1.get("desc") != null ? exceptionInfo1.get("desc").toString() : "");
+        undefinedErrorResult.setStatus(exceptionInfo1.get("status") != null ? exceptionInfo1.get("status").toString() : "");
     }
 
     public CommonResultDTO getExceptionInfoResult(String ymlKey) {
@@ -44,9 +57,9 @@ public class ExceptionInfoConfig {
         if (exceptionInfo1 == null) return undefinedErrorResult;
 
         CommonResultDTO result = new CommonResultDTO();
-        result.setCode(StringUtils.objectIfNullToEmpty(exceptionInfo1.get("code")));
-        result.setMessage(StringUtils.objectIfNullToEmpty(exceptionInfo1.get("desc")));
-        result.setStatus(StringUtils.objectIfNullToEmpty(exceptionInfo1.get("status")));
+        result.setCode(exceptionInfo1.get("code") != null ? exceptionInfo1.get("code").toString() : "");
+        result.setMessage(exceptionInfo1.get("desc") != null ? exceptionInfo1.get("desc").toString() : "");
+        result.setStatus(exceptionInfo1.get("status") != null ? exceptionInfo1.get("status").toString() : "");
         return result;
     }
 
@@ -56,9 +69,9 @@ public class ExceptionInfoConfig {
         if (successInfo == null) return successResultDto;
 
         CommonResultDTO result = new CommonResultDTO();
-        result.setCode(StringUtils.objectIfNullToEmpty(successInfo.get("code")));
-        result.setMessage(StringUtils.objectIfNullToEmpty(successInfo.get("desc")));
-        result.setStatus(StringUtils.objectIfNullToEmpty(successInfo.get("status")));
+        result.setCode(successInfo.get("code") != null ? successInfo.get("code").toString() : "");
+        result.setMessage(successInfo.get("desc") != null ? successInfo.get("desc").toString() : "");
+        result.setStatus(successInfo.get("status") != null ? successInfo.get("status").toString() : "");
         return result;
     }
 
@@ -75,4 +88,3 @@ public class ExceptionInfoConfig {
         return result;
     }
 }
-

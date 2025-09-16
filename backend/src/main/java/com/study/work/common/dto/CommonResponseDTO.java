@@ -19,9 +19,8 @@ public class CommonResponseDTO<T> extends CommonResultDTO {
 
     public void setBody(T body) {
         if (body == null) {
-            throw new BizException("data_not_found", new ExceptionInfoConfig("error-codes.yml"));
+            throw new BizException("data_not_found");
         }
         this.body = body;
     }
 }
-

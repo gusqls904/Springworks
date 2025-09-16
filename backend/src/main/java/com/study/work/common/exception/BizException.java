@@ -8,14 +8,20 @@ public class BizException extends RuntimeException {
     private final String message;
     private final String status;
 
-    public BizException(String key, ExceptionInfoConfig config) {
-        super(config.getExceptionInfoResult(key).getMessage());
-        CommonResultDTO result = config.getExceptionInfoResult(key);
+    // YAML key 기반 생성자
+    public BizException(String key) {
+        this(ExceptionInfoConfig.getInstance().getExceptionInfoResult(key));
+    }
+
+    // CommonResultDTO 기반 생성자
+    private BizException(CommonResultDTO result) {
+        super(result.getMessage());
         this.code = result.getCode();
         this.message = result.getMessage();
         this.status = result.getStatus();
     }
 
+    // 코드 + 메시지 직접 생성
     public BizException(String code, String message) {
         super(message);
         this.code = code;
