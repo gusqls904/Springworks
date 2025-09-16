@@ -1,115 +1,127 @@
 <template>
-  <BasePopup
-    :visible="visible"
-    @update:visible="$emit('update:visible', $event)"
-    @close="handleClose"
-    title="회원가입"
-    size="medium"
-    custom-class="signup-popup"
-    :close-on-overlay="false"
-  >
-    <form @submit.prevent="handleSignup" class="signup-form">
-      <div class="form-group">
-        <label for="signup-userId">사용자 ID <span class="required">*</span></label>
-        <div class="input-with-button">
-          <input
-            type="text"
-            id="signup-userId"
-            v-model="signupForm.userId"
-            placeholder="아이디를 입력해주세요"
-            required
-          >
-          <button 
-            type="button" 
-            class="btn-check-duplicate" 
-            @click="checkUserIdDuplicate"
-            :disabled="!signupForm.userId.trim() || isChecking"
-          >
-            {{ isChecking ? '확인중...' : '중복확인' }}
-          </button>
+  <div>
+    <BasePopup
+      :visible="visible"
+      @update:visible="$emit('update:visible', $event)"
+      @close="handleClose"
+      title="회원가입"
+      size="large"
+      custom-class="signup-popup"
+      :close-on-overlay="false"
+    >
+      <div class="signup-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="signup-userId">사용자 ID <span class="required">*</span></label>
+            <div class="input-with-button">
+              <input
+                type="text"
+                id="signup-userId"
+                v-model="signupForm.userId"
+                placeholder="아이디를 입력해주세요"
+                required
+              >
+              <button 
+                type="button" 
+                class="btn-check-duplicate" 
+                @click="checkUserIdDuplicate"
+                :disabled="!signupForm.userId.trim() || isChecking"
+              >
+                {{ isChecking ? '확인중...' : '중복확인' }}
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-userName">사용자명 <span class="required">*</span></label>
+            <input
+              type="text"
+              id="signup-userName"
+              v-model="signupForm.userName"
+              placeholder="사용자명을 입력해주세요"
+              required
+            >
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="signup-password">비밀번호 <span class="required">*</span></label>
+            <input
+              type="password"
+              id="signup-password"
+              v-model="signupForm.password"
+              placeholder="비밀번호를 입력해주세요"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-password-confirm">비밀번호 확인 <span class="required">*</span></label>
+            <input
+              type="password"
+              id="signup-password-confirm"
+              v-model="signupForm.passwordConfirm"
+              placeholder="비밀번호를 다시 입력해주세요"
+              required
+            >
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="signup-role">사용자 역할 <span class="required">*</span></label>
+            <select
+              id="signup-role"
+              v-model="signupForm.userRole"
+              required
+              :disabled="isLoadingRoles"
+            >
+              <option value="">{{ isLoadingRoles ? '로딩중...' : '역할을 선택해주세요' }}</option>
+              <option 
+                v-for="role in roleList" 
+                :key="role.value" 
+                :value="role.value"
+              >
+                {{ role.label }}
+              </option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-email">이메일</label>
+            <input
+              type="email"
+              id="signup-email"
+              v-model="signupForm.email"
+              placeholder="이메일을 입력해주세요 (선택사항)"
+            >
+          </div>
         </div>
       </div>
       
-      <div class="form-group">
-        <label for="signup-userName">사용자명 <span class="required">*</span></label>
-        <input
-          type="text"
-          id="signup-userName"
-          v-model="signupForm.userName"
-          placeholder="사용자명을 입력해주세요"
-          required
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="signup-password">비밀번호 <span class="required">*</span></label>
-        <input
-          type="password"
-          id="signup-password"
-          v-model="signupForm.password"
-          placeholder="비밀번호를 입력해주세요"
-          required
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="signup-password-confirm">비밀번호 확인 <span class="required">*</span></label>
-        <input
-          type="password"
-          id="signup-password-confirm"
-          v-model="signupForm.passwordConfirm"
-          placeholder="비밀번호를 다시 입력해주세요"
-          required
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="signup-email">이메일</label>
-        <input
-          type="email"
-          id="signup-email"
-          v-model="signupForm.email"
-          placeholder="이메일을 입력해주세요 (선택사항)"
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="signup-role">사용자 역할 <span class="required">*</span></label>
-        <select
-          id="signup-role"
-          v-model="signupForm.userRole"
-          required
-        >
-          <option value="">역할을 선택해주세요</option>
-          <option value="USER">일반 사용자</option>
-          <option value="ADMIN">관리자</option>
-          <option value="TEACHER">강사</option>
-          <option value="STUDENT">학생</option>
-        </select>
-      </div>
-    </form>
+      <template #footer>
+        <button type="button" class="btn btn-secondary" @click="handleClose">
+          취소
+        </button>
+        <button type="button" class="btn btn-primary" @click="handleSignup" :disabled="!isFormValid || isLoading">
+          {{ isLoading ? '처리중...' : '회원가입' }}
+        </button>
+      </template>
+    </BasePopup>
     
-    <template #footer>
-      <button type="button" class="btn btn-secondary" @click="handleClose">
-        취소
-      </button>
-      <button type="button" class="btn btn-primary" @click="handleSignup" :disabled="!isFormValid || isLoading">
-        {{ isLoading ? '처리중...' : '회원가입' }}
-      </button>
-    </template>
-  </BasePopup>
-  
-  <AlertPopup
-    :visible="alertVisible"
-    @update:visible="alertVisible = $event"
-    :title="alertTitle"
-    :message="alertMessage"
-    :type="alertType"
-  />
+    <AlertPopup
+      :visible="alertVisible"
+      @update:visible="alertVisible = $event"
+      :title="alertTitle"
+      :message="alertMessage"
+      :type="alertType"
+    />
+  </div>
 </template>
 
 <script>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
 import AlertPopup from '../../../components/AlertPopup.vue'
 import { apiCall } from '/src/util/api.js'
@@ -138,6 +150,8 @@ export default {
     })
     
     const isLoading = ref(false)
+    const isLoadingRoles = ref(false)
+    const roleList = ref([])
     
     const isFormValid = computed(() => {
       return signupForm.value.userId &&
@@ -148,9 +162,14 @@ export default {
              signupForm.value.password === signupForm.value.passwordConfirm
     })
     
-    // 팝업이 닫힐 때마다 폼 초기화
+
+    /**
+     * 팝업이 열릴 때
+     */
     watch(() => props.visible, (newVal) => {
-      if (!newVal) {
+      if (newVal) {
+        loadRoleList()
+      } else {
         resetForm()
       }
     })
@@ -165,6 +184,36 @@ export default {
         userRole: ''
       }
       isLoading.value = false
+    }
+    
+    /**
+     * 역할 목록 로드
+     */ 
+    const loadRoleList = async () => {
+      try {
+        isLoadingRoles.value = true
+        const response = await apiCall('/user/getRoleList', {}, 'POST')
+        
+        // API 응답에 따라 역할 목록 설정
+        if (response && Array.isArray(response)) {
+          roleList.value = response.map(role => ({
+            value: role.roleId,
+            label: role.roleName
+          }))
+        } else if (response && response.roleList) {
+          roleList.value = response.roleList.map(role => ({
+            value: role.roleId,
+            label: role.roleName
+          }))
+        } else {
+          
+        }
+      } catch (error) {
+        console.error('역할 목록 로드 실패:', error)
+
+      } finally {
+        isLoadingRoles.value = false
+      }
     }
     
     // Alert 상태
@@ -241,7 +290,9 @@ export default {
       emit('close')
     }
     
-    // 사용자 ID 중복확인
+    /**
+     * 사용자 ID 중복확인
+     */ 
     const checkUserIdDuplicate = async () => {
       const userId = signupForm.value.userId.trim()
       if (!userId) {
@@ -278,6 +329,8 @@ export default {
     return {
       signupForm,
       isLoading,
+      isLoadingRoles,
+      roleList,
       isFormValid,
       handleSignup,
       handleClose,
@@ -298,6 +351,17 @@ export default {
 <style scoped>
 .signup-form {
   max-width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .form-group {
@@ -408,6 +472,15 @@ export default {
 
 /* 반응형 */
 @media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .form-row .form-group {
+    margin-bottom: 20px;
+  }
+  
   .form-group input,
   .form-group select {
     padding: 10px 14px;
