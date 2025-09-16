@@ -15,7 +15,7 @@
 		    , USER_NAME
 		    , PASSWORD
 		    , EMAIL
-		    , USR_ROLE
+		    , USER_ROLE
 		    , CREATED_DTTM
 		    , UPDATED_DTTM
 		    , IS_ACTIVE
@@ -44,8 +44,8 @@
 
 
     <select id="getRoleList" resultType="com.study.work.learning.user.dto.RoleDTO">
-        SELECT ROLE_ID as roleId,
-        ROLE_NAME as roleName
+        SELECT ROLE_ID as roleId
+        	 , ROLE_NAME as roleName
         FROM TB_ROLE
     </select>
 

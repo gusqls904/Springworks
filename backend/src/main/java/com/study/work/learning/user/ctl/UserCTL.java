@@ -73,7 +73,9 @@ public class UserCTL {
 
     @PostMapping("/getRoleList")
     public ResponseEntity<List<RoleDTO>> getRoles() {
+    	
         List<RoleDTO> roles = userSVC.getRoleList();
+        
         return ResponseEntity.ok(roles);
     }
 
