@@ -56,31 +56,60 @@
         </div>
       </nav>
       
-      <div class="sidebar-footer" :style="{ 
-        padding: '20px', 
+      <!-- 사이드바 프로필 -->
+      <div class="sidebar-profile" :style="{ 
+        padding: sidebarExpanded ? '20px' : '12px',
         borderTop: '1px solid var(--border-light)',
-        display: sidebarExpanded ? 'block' : 'none'
+        marginTop: 'auto'
       }">
-        <div class="user-profile flex" :style="{ 
+        <div class="profile-container flex" :style="{ 
           alignItems: 'center', 
           gap: sidebarExpanded ? '12px' : '0',
-          justifyContent: sidebarExpanded ? 'flex-start' : 'center'
-        }">
-          <!-- <img :src="user.avatar" :alt="user.name" class="user-avatar" :style="{ 
-            width: '40px', 
-            height: '40px', 
-            borderRadius: '50%', 
-            objectFit: 'cover',
-            transition: 'all 0.3s ease'
-          }"> -->
-          <div class="user-info" v-show="sidebarExpanded" :style="{ 
+          justifyContent: sidebarExpanded ? 'flex-start' : 'center',
+          cursor: 'pointer',
+          padding: '8px',
+          borderRadius: '8px',
+          transition: 'all 0.3s ease'
+        }" @click="toggleSidebarProfileMenu">
+          <div class="profile-avatar" :style="{ 
+            width: sidebarExpanded ? '40px' : '32px',
+            height: sidebarExpanded ? '40px' : '32px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--primary-color)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: sidebarExpanded ? '16px' : '14px',
+            fontWeight: '600',
             transition: 'all 0.3s ease'
           }">
-            <div class="user-name" style="font-weight: 600; color: var(--text-primary); font-size: 14px; margin-bottom: 2px;">{{ user.name }}</div>
-            <div class="user-role" style="font-size: 12px; color: #64748b;">{{ user.role }}</div>
+            <i class="fas fa-user"></i>
           </div>
+          <div v-show="sidebarExpanded" class="profile-details" :style="{ 
+            flex: 1,
+            transition: 'all 0.3s ease'
+          }">
+            <div :style="{ 
+              fontSize: '14px', 
+              fontWeight: '600', 
+              color: 'var(--text-primary)',
+              marginBottom: '2px'
+            }">{{ user.name }}</div>
+            <div :style="{ 
+              fontSize: '12px', 
+              color: '#64748b'
+            }">{{ user.role }}</div>
+          </div>
+          <i v-show="sidebarExpanded" class="fas fa-chevron-down" :style="{ 
+            fontSize: '12px', 
+            color: '#64748b',
+            transition: 'all 0.3s ease',
+            transform: sidebarProfileMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+          }"></i>
         </div>
       </div>
+      
     </aside>
 
     <!-- 메인 콘텐츠 -->
@@ -92,23 +121,15 @@
           <p class="subtitle" style="margin: 0;">{{ selectedMenu.description }}</p>
         </div>
         
-        <div class="header-right flex" style="align-items: center; gap: 24px;">
-          <div class="search-container" style="position: relative; display: flex; align-items: center;">
-            <i class="fas fa-search" style="position: absolute; left: 16px; color: #94a3b8; font-size: 16px;"></i>
-            <input type="text" placeholder="검색..." class="form-input" style="padding: 10px 16px 10px 44px; width: 300px; background: var(--bg-light);">
-          </div>
+        <div class="header-right flex" style="align-items: center; gap: 16px;">
+          <button class="btn btn-sm" style="position: relative; width: 40px; height: 40px; padding: 0;">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; min-width: 16px; text-align: center;">3</span>
+          </button>
           
-          <div class="header-actions flex" style="align-items: center; gap: 16px;">
-            <button class="btn btn-sm" style="position: relative; width: 40px; height: 40px; padding: 0;">
-              <i class="fas fa-bell"></i>
-              <span class="notification-count" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; min-width: 16px; text-align: center;">3</span>
-            </button>
-            
-            <div class="user-menu flex" style="align-items: center; gap: 8px; padding: 8px 12px; background: #f1f5f9; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
-              <!-- <img :src="user.avatar" :alt="user.name" class="user-avatar-small" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;"> -->
-              <i class="fas fa-chevron-down"></i>
-            </div>
-          </div>
+          <button class="btn btn-sm" @click="handleLogout" style="width: 40px; height: 40px; padding: 0;">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
         </div>
       </header>
 
@@ -302,14 +323,14 @@
   
 // 상태 관리
 const sidebarExpanded = ref(true)
+const sidebarProfileMenuOpen = ref(false)
   
   // 사용자 정보
   const user = ref({
     id: 1,
     name: '홍길동',
-  email: 'hong@example.com',
-  role: '관리자',
-  avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+    email: 'hong@example.com',
+    role: '관리자'
   })
   
   // 메뉴
@@ -355,6 +376,21 @@ const sidebarExpanded = ref(true)
 // 선택된 메뉴
   const selectedMenu = ref(menus.value[0])
   const selectMenu = (menu) => (selectedMenu.value = menu)
+  
+  // 사이드바 프로필 메뉴 토글
+  const toggleSidebarProfileMenu = () => {
+    sidebarProfileMenuOpen.value = !sidebarProfileMenuOpen.value
+  }
+  
+  // 로그아웃 처리
+  const handleLogout = () => {
+    if (confirm('정말 로그아웃 하시겠습니까?')) {
+      // 로그아웃 로직 구현
+      console.log('로그아웃 처리')
+      // 예: 토큰 제거, 로그인 페이지로 리다이렉트 등
+      // router.push('/login')
+    }
+  }
   
 // 대시보드 통계
   const dashboardStats = ref([
@@ -634,6 +670,10 @@ const recentActivities = ref([
 }
 
 .table-row:hover {
+  background: var(--bg-light);
+}
+
+.sidebar-profile .profile-container:hover {
   background: var(--bg-light);
 }
 
