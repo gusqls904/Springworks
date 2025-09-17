@@ -24,36 +24,36 @@ public class UserCTL {
 
     @Autowired
     private UserSVC userSVC;
-    
+
     @Operation(summary = "역할 목록 조회", description = "회원가입 팝업 오픈 시")
     @PostMapping("/getRoleList")
     public CommonResponseDTO<List<RoleDTO>> getRoles() {
-    	
+
         List<RoleDTO> roleList = userSVC.getRoleList();
-        
+
         return new CommonResponseDTO<List<RoleDTO>>(roleList);
     }
-    
+
     @Operation(summary = "아이디 중복체크", description = "회원가입 팝업에서 중복체크 버튼 클릭 시")
     @PostMapping("/checkUserId")
     public CommonResponseDTO<Map<String, Object>> checkUserId(@RequestBody Map<String, String> reqMap) {
-    	
-    	String userId = reqMap.get("userId");
-    	
+
+        String userId = reqMap.get("userId");
+
         boolean isDuplicate = userSVC.checkUserId(userId);
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("duplicate", isDuplicate);
-        
+
         return new CommonResponseDTO<>(result);
     }
-    
+
 
     @Operation(summary = "회원가입", description = "회원가입 팝업에서 회원가입 버튼 클릭 시")
     @PostMapping("/signup")
     public CommonResponseDTO<Void> signup(@RequestBody UserDTO userDto) {
         userSVC.signup(userDto);
-        
+
         return new CommonResponseDTO<Void>();
     }
 
