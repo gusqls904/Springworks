@@ -1,44 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '/src/views/common/login/Login.vue'
-import LearningLogin from '/src/views/learning/login/LearningLogin.vue'
-import MallLogin from '/src/views/mall/login/MallLogin.vue'
-import LearningBoard from '/src/views/learning/board/LearningBoard.vue'
+import Home from '/src/views/Home.vue'
+import learningRoutes from './routes/learningRouter.js'
+import mallRoutes from './routes/mallRouter.js'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Login
+    component: Home
   },
   
   // Learning Routes
-  {
-    path: '/learning',
-    children: [
-      {
-        path: 'login',
-        name: 'LearningLogin',
-        component: LearningLogin
-      },
-      {
-        path: 'board',
-        name: 'LearningBoard',
-        component: LearningBoard
-      }
-    ]
-  },
+  ...learningRoutes,
   
   // Mall Routes
-  {
-    path: '/mall',
-    children: [
-      {
-        path: 'login',
-        name: 'MallLogin',
-        component: MallLogin
-      }
-    ]
-  }
+  ...mallRoutes
 ]
 
 const router = createRouter({

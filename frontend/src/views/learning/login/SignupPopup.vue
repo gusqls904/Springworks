@@ -12,18 +12,19 @@
       <div class="signup-form">
         <div class="form-row">
           <div class="form-group">
-            <label for="signup-userId">사용자 ID <span class="required">*</span></label>
+            <label for="signup-userId" class="form-label">사용자 ID <span class="required">*</span></label>
             <div class="input-with-button">
               <input
                 type="text"
                 id="signup-userId"
                 v-model="signupForm.userId"
                 placeholder="아이디를 입력해주세요"
+                class="form-input"
                 required
               >
               <button 
                 type="button" 
-                class="btn-check-duplicate" 
+                class="btn btn-primary" 
                 @click="checkUserIdDuplicate"
                 :disabled="!signupForm.userId.trim() || isChecking"
               >
@@ -33,12 +34,13 @@
           </div>
           
           <div class="form-group">
-            <label for="signup-userName">사용자명 <span class="required">*</span></label>
+            <label for="signup-userName" class="form-label">사용자명 <span class="required">*</span></label>
             <input
               type="text"
               id="signup-userName"
               v-model="signupForm.userName"
               placeholder="사용자명을 입력해주세요"
+              class="form-input"
               required
             >
           </div>
@@ -46,23 +48,25 @@
         
         <div class="form-row">
           <div class="form-group">
-            <label for="signup-password">비밀번호 <span class="required">*</span></label>
+            <label for="signup-password" class="form-label">비밀번호 <span class="required">*</span></label>
             <input
               type="password"
               id="signup-password"
               v-model="signupForm.password"
               placeholder="비밀번호를 입력해주세요"
+              class="form-input"
               required
             >
           </div>
           
           <div class="form-group">
-            <label for="signup-password-confirm">비밀번호 확인 <span class="required">*</span></label>
+            <label for="signup-password-confirm" class="form-label">비밀번호 확인 <span class="required">*</span></label>
             <input
               type="password"
               id="signup-password-confirm"
               v-model="signupForm.passwordConfirm"
               placeholder="비밀번호를 다시 입력해주세요"
+              class="form-input"
               required
             >
           </div>
@@ -70,10 +74,11 @@
         
         <div class="form-row">
           <div class="form-group">
-            <label for="signup-role">사용자 역할 <span class="required">*</span></label>
+            <label for="signup-role" class="form-label">사용자 역할 <span class="required">*</span></label>
             <select
               id="signup-role"
               v-model="signupForm.userRole"
+              class="form-input"
               required
               :disabled="isLoadingRoles"
             >
@@ -89,12 +94,13 @@
           </div>
           
           <div class="form-group">
-            <label for="signup-email">이메일</label>
+            <label for="signup-email" class="form-label">이메일</label>
             <input
               type="email"
               id="signup-email"
               v-model="signupForm.email"
               placeholder="이메일을 입력해주세요 (선택사항)"
+              class="form-input"
             >
           </div>
         </div>
@@ -125,6 +131,7 @@ import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
 import AlertPopup from '../../../components/AlertPopup.vue'
 import { apiCall } from '/src/util/api.js'
+import '../common.css'
 
 export default {
   name: 'SignupPopup',
@@ -328,147 +335,10 @@ export default {
 </script>
 
 <style scoped>
+/* ============================================
+   SIGNUP POPUP - SPECIFIC STYLES
+   ============================================ */
 .signup-form {
   max-width: 100%;
-}
-
-.form-row {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.form-row .form-group {
-  flex: 1;
-  margin-bottom: 0;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-}
-
-.required {
-  color: #ef4444;
-  font-weight: bold;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border-color 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-group select {
-  cursor: pointer;
-  background-color: white;
-}
-
-.btn {
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-}
-
-.btn-secondary {
-  background: #f3f4f6;
-  color: #374151;
-  margin-right: 12px;
-}
-
-.btn-secondary:hover {
-  background: #e5e7eb;
-}
-
-.btn-primary {
-  background: #3b82f6;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #2563eb;
-}
-
-.btn-primary:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
-}
-
-.input-with-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.input-with-button input {
-  flex-grow: 1;
-}
-
-.btn-check-duplicate {
-  padding: 12px 16px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-check-duplicate:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-.btn-check-duplicate:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  .form-row .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group input,
-  .form-group select {
-    padding: 10px 14px;
-    font-size: 16px; /* iOS 줌 방지 */
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
 }
 </style>

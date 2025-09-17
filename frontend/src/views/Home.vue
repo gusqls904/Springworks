@@ -1,60 +1,75 @@
-/* 공통 스타일 import */
-@import '../styles/common.css';
+<template>
+  <div class="login-page">
+    <div class="login_container">
+      <div class="login_left">
+        <div class="login_content">
+          <h2 class="login_title eng">Welcome to Project.</h2>
+          <p class="login_subtitle">
+            멀티 서비스 웹 플랫폼<br>
+            온라인쇼핑몰 / 강의시스템 개발 프로젝트!
+          </p>
 
-/* Login 전용 스타일 */
-.titArea {
-  width: 100%;
-  padding-bottom: 40px;
-  text-align: left;
-  line-height: 0;
-  font-size: 0;
+          <div class="login_social">
+            <div class="login_kakao">
+              <a class="login_btn kakao mov03" @click="goToMallLogin">
+                온라인 쇼핑몰
+              </a>
+            </div>
+
+            <a class="login_btn mov03" @click="goToLearningLogin">
+              강의 시스템
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="login_right">
+        <div class="login_vase">
+          <img src="/img/login_03.jpg">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+export default {
+  name: 'Login',
+  setup() {
+    const router = useRouter()
+    const returnUrl = ref('')
+    const displayNomember = ref(false)
+
+    const goToMallLogin = () => {
+      // 쇼핑몰 로그인 이동
+      router.push('/mall/login')
+    }
+
+    const goToLearningLogin = () => {
+      // 강의 로그인 이동
+      router.push('/learning/login')
+    }
+
+    return {
+      returnUrl,
+      displayNomember,
+      goToMallLogin,
+      goToLearningLogin
+    }
+  }
 }
+</script>
 
-.titArea > p {
-  display: block;
-  text-align: center;
-  line-height: 1.6;
-}
-
-.titArea p[class*='idx'] {
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-}
-
-.titArea p[class*='tit'] {
-  font-size: 34px;
-  font-weight: 300;
-  letter-spacing: -0.06em;
-}
-
-.titArea p[class*='copy'] {
-  font-size: 17px;
-  font-weight: 300;
-  margin-top: 5px;
-  line-height: 1.7;
-  color: #888;
-}
-
-body {
-  background: #f8f9fa;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+<style scoped>
 .login {
   position: absolute;
   top: 30px;
   left: 30px;
   z-index: 10;
-}
-
-.login_logo {
-  width: 300px;
-  height: 80px;
-  object-fit: contain;
 }
 
 .login_container {
@@ -278,38 +293,10 @@ body {
   background-repeat: no-repeat;
 }
 
-.login_coupon {
-  position: absolute;
-  background: #333;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  top: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  z-index: 10;
-}
-
-.login_coupon::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: #333;
-}
-
 .login_kakao {
   position: relative;
 }
 
-.display_nomember {
-  display: none;
-}
 
 @media (max-width: 768px) {
   .login_container {
@@ -344,3 +331,4 @@ body {
   align-items: center;
   justify-content: center;
 }
+</style>
