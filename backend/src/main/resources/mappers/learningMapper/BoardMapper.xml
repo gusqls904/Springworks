@@ -18,5 +18,20 @@
         FROM TB_LEARNING_BOARD
     </select>
 
+    <select id="searchBoard" resultType="com.study.work.learning.board.dto.BoardDTO">
+        SELECT
+        BOARD_ID AS boardId,
+        TITLE AS title,
+        CONTENT AS content,
+        WRITER AS writer,
+        VIEW_COUNT AS viewCount,
+        CREATED_DTTM AS createdDttm,
+        UPDATED_DTTM AS updatedDttm,
+        IS_DELETED AS isDeleted
+        FROM TB_LEARNING_BOARD
+        WHERE TITLE   LIKE CONCAT('%', #{keyword}, '%')
+        OR CONTENT LIKE CONCAT('%', #{keyword}, '%')
+        OR WRITER  LIKE CONCAT('%', #{keyword}, '%')
+    </select>
 
 </mapper>

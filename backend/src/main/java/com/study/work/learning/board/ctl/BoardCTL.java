@@ -22,7 +22,7 @@ public class BoardCTL {
     @Autowired
     private BoardSVC boardSVC;
 
-    @Operation(summary = "게시판 목록 조회", description = "-")
+    @Operation(summary = "게시판 목록 조회", description = "로그인 이후 게시판 기본 화면에서")
     @PostMapping("/getBoardList")
     public CommonResponseDTO<List<BoardDTO>> getBoards() {
 
@@ -31,5 +31,13 @@ public class BoardCTL {
         return new CommonResponseDTO<List<BoardDTO>>(boardList);
     }
 
+    @Operation(summary = "게시판 검색", description = "제목, 내용, 작성자 단일 키워드 입력 시")
+    @PostMapping("/searchBoard")
+    public CommonResponseDTO<List<BoardDTO>> searchBoard(@RequestBody Map<String, String> reqMap) {
+        String keyword=reqMap.get("keyword");
+        List<BoardDTO> boardList = boardSVC.searchBoard(keyword);
+
+        return new CommonResponseDTO<List<BoardDTO>>(boardList);
+    }
 
 }

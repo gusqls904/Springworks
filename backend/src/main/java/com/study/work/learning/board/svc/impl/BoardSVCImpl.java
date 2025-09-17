@@ -19,20 +19,25 @@ public class BoardSVCImpl implements BoardSVC {
         return boardDAO.getBoardList();
     }
 
+    @Override
+    public List<BoardDTO> searchBoard(String keyword) {
+        return boardDAO.searchBoard(keyword);
+    }
 
-//    @Override
-//    public void createBoard(BoardDTO boardDTO) {
-//        boardDAO.insertBoard(boardDTO);
-//    }
-//
-//    @Override
-//    public void updateBoard(BoardDTO boardDTO) {
-//        boardDAO.updateBoard(boardDTO);
-//    }
-//
-//    @Override
-//    public void deleteBoard(Long boardId) {
-//        boardDAO.deleteBoard(boardId);
-//    }
+
+/*    @Override
+    public void createBoard(BoardDTO boardDTO) {
+        boardDAO.insertBoard(boardDTO);
+    }
+
+    @Override
+    public void updateBoard(BoardDTO boardDTO) {
+        boardDAO.updateBoard(boardDTO);
+    }
+
+    @Override
+    public void deleteBoard(Long boardId) {
+        boardDAO.deleteBoard(boardId);
+    }*/
 
 }

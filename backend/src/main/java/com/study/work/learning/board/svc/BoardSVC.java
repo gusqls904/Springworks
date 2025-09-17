@@ -9,4 +9,5 @@ public interface BoardSVC {
 
     List<BoardDTO> getBoardList();
 
+    List<BoardDTO> searchBoard(String keyword);
 }
