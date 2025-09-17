@@ -10,7 +10,10 @@ public interface BoardDAO {
     List<BoardDTO> getBoardList();
 
     List<BoardDTO> searchBoard(String keyword);
-//    void insertBoard(BoardDTO boardDTO);
+
+    void insertBoard(BoardDTO boardDTO);
+
+
 //
 //    void updateBoard(BoardDTO boardDTO);
 //

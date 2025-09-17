@@ -24,13 +24,12 @@ public class BoardSVCImpl implements BoardSVC {
         return boardDAO.searchBoard(keyword);
     }
 
-
-/*    @Override
-    public void createBoard(BoardDTO boardDTO) {
+    @Override
+    public void insertBoard(BoardDTO boardDTO) {
         boardDAO.insertBoard(boardDTO);
     }
 
-    @Override
+    /*@Override
     public void updateBoard(BoardDTO boardDTO) {
         boardDAO.updateBoard(boardDTO);
     }

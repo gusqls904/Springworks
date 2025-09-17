@@ -34,4 +34,26 @@
         OR WRITER  LIKE CONCAT('%', #{keyword}, '%')
     </select>
 
+    <insert id="insertBoard" parameterType="com.study.work.learning.board.dto.BoardDTO">
+        INSERT INTO TB_LEARNING_BOARD(
+        BOARD_ID
+        , TITLE
+        , CONTENT
+        , WRITER
+        , VIEW_COUNT
+        , CREATED_DTTM
+        , UPDATED_DTTM
+        , IS_DELETED
+        ) VALUES (
+        #{boardId}
+        , #{title}
+        , #{content}
+        , #{writer}
+        , #{viewCount}
+        , CURRENT_TIMESTAMP()
+        , CURRENT_TIMESTAMP()
+        , #{isDeleted}
+        )
+    </insert>
+
 </mapper>
