@@ -77,7 +77,7 @@
             <label for="signup-role" class="form-label">사용자 역할 <span class="required">*</span></label>
             <select
               id="signup-role"
-              v-model="signupForm.userRole"
+              v-model="signupForm.roleId"
               class="form-input"
               required
               :disabled="isLoadingRoles"
@@ -166,7 +166,7 @@ export default {
       password: '',
       passwordConfirm: '',
       email: '',
-      userRole: ''
+      roleId: ''
     })
 
     const isFormValid = computed(() => {
@@ -174,7 +174,7 @@ export default {
              signupForm.value.userName &&
              signupForm.value.password &&
              signupForm.value.passwordConfirm &&
-             signupForm.value.userRole &&
+             signupForm.value.roleId &&
              signupForm.value.password === signupForm.value.passwordConfirm
     })
     
@@ -185,7 +185,7 @@ export default {
         password: '',
         passwordConfirm: '',
         email: '',
-        userRole: ''
+        roleId: ''
       }
       isLoading.value = false
     }
@@ -278,7 +278,7 @@ export default {
           userName: signupForm.value.userName,
           password: signupForm.value.password,
           email: signupForm.value.email || null,
-          userRole: signupForm.value.userRole,
+          roleId: signupForm.value.roleId,
           isActive: '1'
         }
         

@@ -203,6 +203,13 @@ i {
   cursor: not-allowed;
 }
 
+.btn-primary:disabled:hover {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Secondary Button - 보조 액션 */
 .btn-secondary {
   background: transparent;
@@ -213,6 +220,21 @@ i {
 .btn-secondary:hover {
   background: #f9fafb;
   border-color: #9ca3af;
+}
+
+.btn-secondary:disabled {
+  background: transparent;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-secondary:disabled:hover {
+  background: transparent;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
 }
 
 /* Button Sizes */
@@ -241,6 +263,47 @@ i {
 
 .form-input::placeholder {
   color: var(--text-muted);
+}
+
+/* 비활성화된 인풋박스 스타일 */
+.form-input:disabled {
+  background-color: var(--bg-light);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 비활성화된 인풋박스 호버 이벤트 처리 */
+.form-input:disabled:hover {
+  border-color: var(--border-color);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.form-input:disabled:focus {
+  border-color: var(--border-color);
+  box-shadow: none;
+  outline: none;
+}
+
+/* 셀렉트박스 비활성화 스타일 */
+select.form-input:disabled {
+  background-color: var(--bg-light);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+select.form-input:disabled:hover {
+  border-color: var(--border-color);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+select.form-input:disabled:focus {
+  border-color: var(--border-color);
+  box-shadow: none;
+  outline: none;
 }
 
 /* Form Group */
@@ -691,6 +754,13 @@ i {
 
 .page-btn:disabled {
   opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-btn:disabled:hover {
+  background: var(--bg-light);
+  color: var(--text-primary);
+  border-color: var(--border-color);
   cursor: not-allowed;
 }
 

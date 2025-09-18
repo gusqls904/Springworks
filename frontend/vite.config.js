@@ -1,10 +1,26 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import { existsSync, rmSync } from 'fs'
+
+// 빌드 전에 기존 static 폴더 내용 삭제하는 플러그인
+const cleanStaticDir = () => {
+  return {
+    name: 'clean-static-dir',
+    buildStart() {
+      const staticDir = resolve(__dirname, '../backend/src/main/resources/static')
+      if (existsSync(staticDir)) {
+        console.log('🧹 기존 static 폴더 내용 삭제 중...')
+        rmSync(staticDir, { recursive: true, force: true })
+        console.log('✅ static 폴더 정리 완료')
+      }
+    }
+  }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), cleanStaticDir()],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')

@@ -117,6 +117,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '/src/util/api.js'
+import { getBoardMockData } from '../../mock/boardMockData.js'
+import { callApiOrMock } from '/src/util/mockConfig.js'
 import '../common.css'
 
 export default {
@@ -168,6 +170,7 @@ export default {
     //     createdDttm: '2024-01-11T11:30:00'
     //   }
     // ])
+    
     const loading = ref(false)
     const searchQuery = ref('')
     const searchType = ref('all')
@@ -191,23 +194,38 @@ export default {
     const getBoardList = async () => {
       try {
         loading.value = true
-        // const res = await api.post('/board/getBoardList', {
-        //   page: currentPage.value,
-        //   size: pageSize.value,
-        //   query: searchQuery.value
-        // })
-
-        const res = await api.post('/board/getBoardList')
-
-        const list =
-          Array.isArray(res) ? res :
-          Array.isArray(res?.body) ? res.body :
-          []
-
-        boardList.value = list
+        
+        // API 요청 파라미터 구성
+        const requestData = {
+          page: currentPage.value,
+          size: pageSize.value,
+          searchType: searchType.value,
+          searchQuery: searchQuery.value
+        }
+        
+        // API 호출 또는 목업 데이터 사용
+        const res = await callApiOrMock(
+          // 실제 API 호출
+          () => api.post('/board/getBoardList', requestData),
+          // 목업 데이터 호출
+          () => getBoardMockData(requestData)
+        )
+        
+        // 응답 데이터 처리
+        if (res && res.body) {
+          boardList.value = res.body.boardList || []
+          totalCount.value = res.body.pagination?.totalElements || 0
+          totalPages.value = res.body.pagination?.totalPages || 1
+        } else {
+          boardList.value = []
+          totalCount.value = 0
+          totalPages.value = 1
+        }
       } catch (e) {
         console.error('게시글 목록 로드 실패:', e)
-        // alert('게시글을 불러오는데 실패했습니다.')
+        boardList.value = []
+        totalCount.value = 0
+        totalPages.value = 1
       } finally {
         loading.value = false
       }
@@ -359,5 +377,20 @@ export default {
 .board-table .table-row .table-cell:nth-child(4),
 .board-table .table-row .table-cell:nth-child(5) {
   justify-content: center !important;
+}
+
+/* 버튼 아이콘과 텍스트 간격 조정 */
+.btn i {
+  margin-right: 6px;
+}
+
+.btn i:last-child {
+  margin-right: 0;
+  margin-left: 6px;
+}
+
+/* 아이콘만 있는 버튼은 간격 없음 */
+.btn:has(i:only-child) i {
+  margin: 0;
 }
 </style>
