@@ -122,6 +122,18 @@
         </div>
         
         <div class="header-right flex" style="align-items: center; gap: 16px;">
+          <!-- 목업 모드 토글 버튼 -->
+          <button 
+            class="btn btn-sm mock-toggle-btn" 
+            :class="{ 'active': isMockMode }"
+            @click="handleToggleMockMode"
+            :title="isMockMode ? '목업 모드 ON' : '목업 모드 OFF'"
+            style="position: relative; width: 40px; height: 40px; padding: 0;"
+          >
+            <i :class="isMockMode ? 'fas fa-database' : 'fas fa-server'"></i>
+            <span v-if="isMockMode" class="mock-indicator" style="position: absolute; top: -4px; right: -4px; background: #10b981; color: white; font-size: 8px; padding: 2px 4px; border-radius: 8px; min-width: 12px; text-align: center;">M</span>
+          </button>
+          
           <button class="btn btn-sm" style="position: relative; width: 40px; height: 40px; padding: 0;">
             <i class="fas fa-bell"></i>
             <span class="notification-count" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; min-width: 16px; text-align: center;">3</span>
@@ -155,11 +167,15 @@
   import Users from './users/Users.vue'
   import Courses from './courses/Courses.vue'
   import Settings from './settings/Settings.vue'
+  import { isMockMode as getMockMode, toggleMockMode } from '/src/util/mockConfig.js'
   import './common.css'
   
 // 상태 관리
 const sidebarExpanded = ref(true)
 const sidebarProfileMenuOpen = ref(false)
+
+// 목업 모드 상태
+const isMockMode = ref(getMockMode())
 
 // 컴포넌트 매핑
 const components = {
@@ -239,6 +255,13 @@ const components = {
     sidebarProfileMenuOpen.value = !sidebarProfileMenuOpen.value
   }
   
+  // 목업 모드 토글
+  const handleToggleMockMode = () => {
+    const newMode = toggleMockMode()
+    isMockMode.value = newMode
+    console.log(`🔧 목업 모드가 ${newMode ? '활성화' : '비활성화'}되었습니다.`)
+  }
+
   // 로그아웃 처리
   const handleLogout = () => {
     if (confirm('정말 로그아웃 하시겠습니까?')) {
@@ -347,6 +370,43 @@ const components = {
    STATUS STYLES
    ============================================ */
 /* Status styles moved to individual components */
+
+/* ============================================
+   MOCK MODE TOGGLE BUTTON
+   ============================================ */
+.mock-toggle-btn {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.mock-toggle-btn:hover {
+  background: var(--bg-light);
+  transform: translateY(-1px);
+}
+
+.mock-toggle-btn.active {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.mock-toggle-btn.active:hover {
+  background: #a7f3d0;
+  transform: translateY(-1px);
+}
+
+.mock-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
 
 /* ============================================
    HOVER EFFECTS
