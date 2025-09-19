@@ -8,11 +8,14 @@ const cleanStaticDir = () => {
   return {
     name: 'clean-static-dir',
     buildStart() {
-      const staticDir = resolve(__dirname, '../backend/src/main/resources/static')
-      if (existsSync(staticDir)) {
-        console.log('🧹 기존 static 폴더 내용 삭제 중...')
-        rmSync(staticDir, { recursive: true, force: true })
-        console.log('✅ static 폴더 정리 완료')
+      // 빌드 모드일 때만 실행 (개발 모드에서는 실행하지 않음)
+      if (process.env.NODE_ENV === 'production') {
+        const staticDir = resolve(__dirname, '../backend/src/main/resources/static')
+        if (existsSync(staticDir)) {
+          console.log('🧹 기존 static 폴더 내용 삭제 중...')
+          rmSync(staticDir, { recursive: true, force: true })
+          console.log('✅ static 폴더 정리 완료')
+        }
       }
     }
   }

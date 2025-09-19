@@ -3,6 +3,30 @@
  * Users.vue에서 사용하는 테스트 데이터
  */
 
+// 역할 목록 목업 데이터
+export const roleListMockData = {
+  "httpStatusCode": 200,
+  "code": "20000000",
+  "message": "정상 처리 되었습니다.",
+  "body": [
+    {
+      "roleId": "INSTRUCTOR",
+      "roleName": "강사",
+      "isActive": null
+    },
+    {
+      "roleId": "ADMIN",
+      "roleName": "관리자",
+      "isActive": null
+    },
+    {
+      "roleId": "STUDENT",
+      "roleName": "학생",
+      "isActive": null
+    }
+  ]
+}
+
 export const userMockData = {
   "httpStatusCode": 200,
   "code": "20000000",

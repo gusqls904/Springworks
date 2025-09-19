@@ -450,14 +450,14 @@ export default {
 /* 사용자 테이블 그리드 컬럼 조정 */
 .board-table .table-header {
   display: grid;
-  grid-template-columns: minmax(60px, 80px) 1fr 1fr minmax(150px, 200px) minmax(100px, 200px) minmax(80px, 100px) minmax(120px, 140px) minmax(100px, 120px);
+  grid-template-columns: minmax(80px, 100px) minmax(200px, 250px) minmax(160px, 180px) 2fr minmax(120px, 150px) minmax(100px, 120px) minmax(140px, 160px) minmax(120px, 140px);
   background: var(--primary-color) !important;
   border-bottom: none !important;
 }
 
 .board-table .table-row {
   display: grid;
-  grid-template-columns: minmax(60px, 80px) 1fr 1fr minmax(150px, 200px) minmax(100px, 200px) minmax(80px, 100px) minmax(120px, 140px) minmax(100px, 120px);
+  grid-template-columns: minmax(80px, 100px) minmax(200px, 250px) minmax(160px, 180px) 2fr minmax(120px, 150px) minmax(100px, 120px) minmax(140px, 160px) minmax(120px, 140px);
 }
 
 .board-table .table-header .table-cell {
@@ -524,7 +524,7 @@ export default {
 @media (max-width: 1200px) {
   .board-table .table-header,
   .board-table .table-row {
-    grid-template-columns: minmax(50px, 60px) 1fr 1fr minmax(120px, 150px) minmax(70px, 80px) minmax(70px, 80px) minmax(100px, 120px) minmax(80px, 100px);
+    grid-template-columns: minmax(70px, 90px) minmax(180px, 220px) minmax(120px, 150px) 2fr minmax(100px, 130px) minmax(80px, 100px) minmax(120px, 140px) minmax(100px, 120px);
   }
 }
 

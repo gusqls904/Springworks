@@ -88,6 +88,106 @@ export const boardMockData = {
         "createdDttm": "2025-09-09T15:10:00",
         "updatedDttm": "2025-09-09T15:10:00",
         "isDeleted": "0"
+      },
+      {
+        "boardId": 9,
+        "title": "Spring Security 인증과 권한 관리",
+        "content": "스프링 시큐리티를 활용한 인증과 권한 관리 방법을 알아봅니다.",
+        "writer": "이수진",
+        "viewCount": 41,
+        "createdDttm": "2025-09-08T10:00:00",
+        "updatedDttm": "2025-09-08T10:00:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 10,
+        "title": "Docker 기초 사용법",
+        "content": "도커의 기본 개념과 컨테이너 실행 방법을 설명합니다.",
+        "writer": "박지훈",
+        "viewCount": 52,
+        "createdDttm": "2025-09-07T09:45:00",
+        "updatedDttm": "2025-09-07T09:45:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 11,
+        "title": "쿠버네티스란 무엇인가?",
+        "content": "쿠버네티스의 개념과 기본 사용법에 대해 설명합니다.",
+        "writer": "김민아",
+        "viewCount": 63,
+        "createdDttm": "2025-09-06T14:15:00",
+        "updatedDttm": "2025-09-06T14:15:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 12,
+        "title": "Git 브랜치 전략 정리",
+        "content": "Git Flow와 GitHub Flow의 차이를 정리해보았습니다.",
+        "writer": "최준혁",
+        "viewCount": 29,
+        "createdDttm": "2025-09-05T16:30:00",
+        "updatedDttm": "2025-09-05T16:30:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 13,
+        "title": "Jenkins를 이용한 CI/CD 파이프라인 구축",
+        "content": "젠킨스를 사용해 CI/CD 환경을 구축하는 방법을 공유합니다.",
+        "writer": "오지훈",
+        "viewCount": 74,
+        "createdDttm": "2025-09-04T11:10:00",
+        "updatedDttm": "2025-09-04T11:10:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 14,
+        "title": "AWS S3 사용 가이드",
+        "content": "AWS S3의 기본 사용법과 버킷 정책 설정 방법을 설명합니다.",
+        "writer": "홍길동",
+        "viewCount": 38,
+        "createdDttm": "2025-09-03T13:50:00",
+        "updatedDttm": "2025-09-03T13:50:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 15,
+        "title": "OAuth 2.0 인증 흐름 이해하기",
+        "content": "OAuth 2.0 인증 흐름을 간단히 설명합니다.",
+        "writer": "이영희",
+        "viewCount": 48,
+        "createdDttm": "2025-09-02T09:40:00",
+        "updatedDttm": "2025-09-02T09:40:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 16,
+        "title": "MariaDB 성능 튜닝 팁",
+        "content": "MariaDB의 성능을 최적화하기 위한 주요 팁을 소개합니다.",
+        "writer": "김철수",
+        "viewCount": 92,
+        "createdDttm": "2025-09-01T15:00:00",
+        "updatedDttm": "2025-09-01T15:00:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 17,
+        "title": "리눅스 서버 보안 체크리스트",
+        "content": "리눅스 서버 운영 시 필수로 확인해야 할 보안 체크리스트를 공유합니다.",
+        "writer": "박민수",
+        "viewCount": 66,
+        "createdDttm": "2025-08-31T18:20:00",
+        "updatedDttm": "2025-08-31T18:20:00",
+        "isDeleted": "0"
+      },
+      {
+        "boardId": 18,
+        "title": "Nginx와 Apache 비교",
+        "content": "두 웹 서버의 특징과 차이점을 비교합니다.",
+        "writer": "정민호",
+        "viewCount": 59,
+        "createdDttm": "2025-08-30T10:25:00",
+        "updatedDttm": "2025-08-30T10:25:00",
+        "isDeleted": "0"
       }
     ],
     "pagination": {
