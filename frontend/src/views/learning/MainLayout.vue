@@ -17,7 +17,7 @@
             fontWeight: '700', 
             color: 'var(--text-primary)',
             transition: 'all 0.3s ease'
-          }">Learning</span>
+          }">StudyHub</span>
         </div>
         <button class="btn btn-sm" @click="sidebarExpanded = !sidebarExpanded" style="width: 40px; height: 40px; padding: 0;">
           <i class="fas fa-bars"></i>
@@ -156,20 +156,37 @@
 
       </div>
     </main>
+
+    <!-- 알러트 팝업 -->
+    <AlertPopup
+      :visible="alertVisible"
+      @update:visible="alertVisible = $event"
+      :title="alertTitle"
+      :message="alertMessage"
+      :type="alertType"
+      @confirm="handleAlertConfirm"
+      @cancel="handleAlertCancel"
+    />
   </div>
   </template>
   
   <script setup>
   import { ref, computed } from 'vue'
+  import { useRouter } from 'vue-router'
   import Board from './board/Board.vue'
+  import QnA from './qna/QnA.vue'
   import Dashboard from './dashboard/dashboard.vue'
   import Analytics from './analytics/Analytics.vue'
   import Users from './users/Users.vue'
   import Courses from './courses/Courses.vue'
   import Settings from './settings/Settings.vue'
+  import AlertPopup from '../../components/AlertPopup.vue'
   import { isMockMode as getMockMode, toggleMockMode } from '/src/util/mockConfig.js'
   import './common.css'
   
+// Router 초기화
+const router = useRouter()
+
 // 상태 관리
 const sidebarExpanded = ref(true)
 const sidebarProfileMenuOpen = ref(false)
@@ -177,10 +194,18 @@ const sidebarProfileMenuOpen = ref(false)
 // 목업 모드 상태
 const isMockMode = ref(getMockMode())
 
+// 알러트 팝업 상태
+const alertVisible = ref(false)
+const alertTitle = ref('알림')
+const alertMessage = ref('')
+const alertType = ref('info')
+const alertCallback = ref(null)
+
 // 컴포넌트 매핑
 const components = {
   Dashboard,
   Board,
+  QnA,
   Analytics,
   Users,
   Courses,
@@ -212,6 +237,13 @@ const components = {
       component: 'Board'
     },
     { 
+      name: 'qna', 
+      title: 'Q&A', 
+      icon: 'fas fa-question-circle',
+      description: '학생 질문과 답변을 관리하세요',
+      component: 'QnA'
+    },
+    { 
       name: 'users', 
       title: '사용자', 
       icon: 'fas fa-users',
@@ -241,9 +273,21 @@ const components = {
     }
   ])
 
-// 선택된 메뉴
-  const selectedMenu = ref(menus.value[0])
-  const selectMenu = (menu) => (selectedMenu.value = menu)
+// 선택된 메뉴 - localStorage에서 복원하거나 기본값 사용
+const getInitialMenu = () => {
+  const savedMenu = localStorage.getItem('selectedMenu')
+  if (savedMenu) {
+    const menu = menus.value.find(m => m.name === savedMenu)
+    return menu || menus.value[0]
+  }
+  return menus.value[0]
+}
+
+const selectedMenu = ref(getInitialMenu())
+const selectMenu = (menu) => {
+  selectedMenu.value = menu
+  localStorage.setItem('selectedMenu', menu.name)
+}
   
   // 현재 컴포넌트 계산
   const currentComponent = computed(() => {
@@ -262,14 +306,47 @@ const components = {
     console.log(`🔧 목업 모드가 ${newMode ? '활성화' : '비활성화'}되었습니다.`)
   }
 
+  // 알러트 표시 함수
+  const showAlert = (message, type = 'info', title = '알림', callback = null) => {
+    alertMessage.value = message
+    alertType.value = type
+    alertTitle.value = title
+    alertCallback.value = callback
+    alertVisible.value = true
+  }
+
+  // 알러트 확인 처리
+  const handleAlertConfirm = () => {
+    if (alertCallback.value) {
+      alertCallback.value()
+    }
+    alertVisible.value = false
+    alertCallback.value = null
+  }
+
+  // 알러트 취소 처리
+  const handleAlertCancel = () => {
+    alertVisible.value = false
+    alertCallback.value = null
+  }
+
   // 로그아웃 처리
   const handleLogout = () => {
-    if (confirm('정말 로그아웃 하시겠습니까?')) {
-      // 로그아웃 로직 구현
-      console.log('로그아웃 처리')
-      // 예: 토큰 제거, 로그인 페이지로 리다이렉트 등
-      // router.push('/login')
-    }
+    showAlert(
+      '정말 로그아웃 하시겠습니까?',
+      'warning',
+      '로그아웃 확인',
+      () => {
+        // 로그아웃 로직 구현
+        console.log('로그아웃 처리')
+        
+        // 로컬 스토리지 정리 (선택사항)
+        localStorage.removeItem('selectedMenu')
+        
+        // 로그인 페이지로 이동
+        router.push('/learning/login')
+      }
+    )
   }
   
 

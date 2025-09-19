@@ -4,10 +4,13 @@
  */
 
 // 사용자 목업 데이터
-export { userMockData, getUserMockData, updateUserMockData, createUserMockData, deleteUserMockData } from './userMockData.js'
+export { userMockData, getUserMockData, updateUserMockData, createUserMockData, deleteUserMockData, roleListMockData } from './userMockData.js'
 
 // 게시판 목업 데이터
 export { boardMockData, getBoardMockData } from './boardMockData.js'
+
+// Q&A 목업 데이터
+export { qnaMockData, getQnAMockData } from './qnaMockData.js'
 
 // 목업 데이터 전체 내보내기
 export const mockData = {
@@ -18,5 +21,12 @@ export const mockData = {
   board: {
     data: boardMockData,
     getData: getBoardMockData
+  },
+  qna: {
+    data: qnaMockData,
+    getData: getQnAMockData
+  },
+  role: {
+    data: roleListMockData
   }
 }

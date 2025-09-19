@@ -151,7 +151,7 @@ import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
 import AlertPopup from '../../../components/AlertPopup.vue'
 import { apiCall } from '/src/util/api.js'
-import { updateUserMockData, createUserMockData } from '../../mock/userMockData.js'
+import { updateUserMockData, createUserMockData, roleListMockData } from '../../mock/userMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
 import '../common.css'
 
@@ -289,7 +289,13 @@ export default {
     const getRoleList = async () => {
       try {
         isLoadingRoles.value = true
-        const res = await apiCall('/user/getRoleList', {}, 'POST')
+        
+        const res = await callApiOrMock(
+          // 실제 API 호출
+          () => apiCall('/user/getRoleList', {}, 'POST'),
+          // 목업 데이터 호출
+          () => Promise.resolve(roleListMockData)
+        )
 
         roleList.value = res?.body.map(role => ({
           value: role.roleId,
