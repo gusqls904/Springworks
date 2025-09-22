@@ -35,7 +35,7 @@
 		    , USER_NAME
 		    , PASSWORD
 		    , EMAIL
-		    , USER_ROLE
+		    , ROLE_ID
 		    , CREATED_DTTM
 		    , UPDATED_DTTM
 		    , IS_ACTIVE
@@ -44,7 +44,7 @@
 		    , #{userName}
 		    , #{password}
 		    , #{email}
-		    , #{userRole}
+		    , #{roleId}
 		    , CURRENT_TIMESTAMP()
 		    , CURRENT_TIMESTAMP()
 		    , #{isActive}

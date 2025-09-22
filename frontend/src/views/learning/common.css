@@ -238,6 +238,26 @@ i {
   cursor: not-allowed;
 }
 
+/* Success Button - 성공 상태 */
+.btn-success {
+  background: #10b981;
+  color: white;
+  border: 1px solid #10b981;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #059669;
+  border-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:disabled {
+  background: #10b981;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
 /* Button Sizes */
 .btn-sm { padding: 6px 12px; font-size: 12px; }    /* 작은 버튼 */
 .btn-lg { padding: 12px 20px; font-size: 16px; }    /* 큰 버튼 */
