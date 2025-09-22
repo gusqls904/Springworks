@@ -116,28 +116,20 @@
       </template>
     </BasePopup>
     
-    <AlertPopup
-      :visible="alertVisible"
-      @update:visible="alertVisible = $event"
-      :title="alertTitle"
-      :message="alertMessage"
-      :type="alertType"
-    />
   </div>
 </template>
 
 <script>
 import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
-import AlertPopup from '../../../components/AlertPopup.vue'
 import { apiCall } from '/src/util/api.js'
+import Swal from 'sweetalert2'
 import '../common.css'
 
 export default {
   name: 'SignupPopup',
   components: {
-    BasePopup,
-    AlertPopup
+    BasePopup
   },
   props: {
     visible: {
@@ -148,11 +140,6 @@ export default {
   emits: ['update:visible', 'close', 'signup'],
   setup(props, { emit }) {
 
-    // Alert 상태
-    const alertVisible = ref(false)
-    const alertTitle = ref('알림')
-    const alertMessage = ref('')
-    const alertType = ref('info')
     
     const isLoading = ref(false)
     const isLoadingRoles = ref(false)
@@ -304,13 +291,17 @@ export default {
     }
     
     /**
-     * Alert 표시 함수
+     * Alert 표시 함수 (SweetAlert2)
      */
-    const showAlert = (message, type = 'info', title = '알림') => {
-      alertMessage.value = message
-      alertType.value = type
-      alertTitle.value = title
-      alertVisible.value = true
+    const showAlert = async (message, type = 'info', title = '알림') => {
+      await Swal.fire({
+        title: title,
+        text: message,
+        icon: type,
+        confirmButtonText: '확인',
+        allowOutsideClick: false,
+        allowEscapeKey: true
+      })
     }
     
     return {
@@ -321,10 +312,6 @@ export default {
       isFormValid,
       handleSignup,
       handleClose,
-      alertVisible,
-      alertTitle,
-      alertMessage,
-      alertType,
       showAlert,
       isChecking,
       userIdChecked,

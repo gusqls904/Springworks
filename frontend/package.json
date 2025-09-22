@@ -13,8 +13,10 @@
     "axios": "^1.11.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.9",
+    "sweetalert2": "^11.23.0",
     "vue": "^3.4.0",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",

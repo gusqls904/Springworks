@@ -12,6 +12,16 @@ export { boardMockData, getBoardMockData } from './boardMockData.js'
 // Q&A 목업 데이터
 export { qnaMockData, getQnAMockData } from './qnaMockData.js'
 
+// 메뉴 목업 데이터
+export { 
+  menuMockData, 
+  getMenuMockData, 
+  getMenuDetailMockData, 
+  createMenuMockData, 
+  updateMenuMockData, 
+  deleteMenuMockData 
+} from './menuMockData.js'
+
 // 목업 데이터 전체 내보내기
 export const mockData = {
   user: {
@@ -28,5 +38,13 @@ export const mockData = {
   },
   role: {
     data: roleListMockData
+  },
+  menu: {
+    data: menuMockData,
+    getData: getMenuMockData,
+    getDetail: getMenuDetailMockData,
+    create: createMenuMockData,
+    update: updateMenuMockData,
+    delete: deleteMenuMockData
   }
 }
