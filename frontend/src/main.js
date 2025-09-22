@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './util/router.js'
 import Toast from "vue-toastification"
@@ -6,13 +7,15 @@ import "vue-toastification/dist/index.css"
 import "./styles/popup-custom.css" // Custom CSS import
 
 const app = createApp(App)
+const pinia = createPinia()
 
+app.use(pinia)
 app.use(router)
 
 // Vue Toastification 설정
 app.use(Toast, {
-  position: "top-right",
-  timeout: 3000,
+  position: "top-center", // 위치 변경 가능
+  timeout: 2000,
   closeOnClick: true,
   pauseOnFocusLoss: true,
   pauseOnHover: true,

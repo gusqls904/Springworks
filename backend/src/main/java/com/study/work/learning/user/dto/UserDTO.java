@@ -20,7 +20,7 @@ public class UserDTO {
     private String email;
 
     @Schema(description = "사용자 역할", example = "admin")
-    private String userRole;
+    private String roleId;
 
 //    @Schema(description = "가입일 (yyyy-MM-dd HH:mm:ss)", example = "2025-09-11 10:30:00")
 //    private String createdDttm;

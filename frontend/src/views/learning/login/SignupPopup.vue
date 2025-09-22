@@ -20,15 +20,18 @@
                 v-model="signupForm.userId"
                 placeholder="아이디를 입력해주세요"
                 class="form-input"
+                :disabled="userIdChecked"
                 required
               >
               <button 
                 type="button" 
-                class="btn btn-primary" 
+                class="btn"
+                :class="userIdChecked ? 'btn-success' : 'btn-primary'"
                 @click="checkUserIdDuplicate"
-                :disabled="!signupForm.userId.trim() || isChecking"
+                :disabled="!signupForm.userId.trim() || isChecking || userIdChecked"
               >
-                {{ isChecking ? '확인중...' : '중복확인' }}
+                <i v-if="userIdChecked" class="fas fa-check" style="margin-right: 4px;"></i>
+                {{ isChecking ? '확인중...' : userIdChecked ? '확인완료' : '중복확인' }}
               </button>
             </div>
           </div>
@@ -174,6 +177,7 @@ export default {
         email: '',
         roleId: ''
       }
+      userIdChecked.value = false
       isLoading.value = false
     }
     

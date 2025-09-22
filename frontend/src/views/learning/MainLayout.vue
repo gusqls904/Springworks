@@ -172,6 +172,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '/src/stores/userStore.js'
 import Board from './board/Board.vue'
 import QnA from './qna/QnA.vue'
 import Dashboard from './dashboard/dashboard.vue'
@@ -188,6 +189,11 @@ import './common.css'
   
 // Router 초기화
 const router = useRouter()
+
+// ============================================
+// Pinia Store
+// ============================================
+const userStore = useUserStore()
 
 // ============================================
 // 상태 관리
@@ -213,16 +219,14 @@ const components = {
 }
 
 // ============================================
-  // 사용자 정보
-
+// 사용자 정보 (Pinia Store에서 가져오기)
 // ============================================
-  const user = ref({
-    id: 1,
-    name: '홍길동',
-
-  email: 'hong@example.com',
-  role: '관리자'
-})
+const user = computed(() => ({
+  id: userStore.userId,
+  name: userStore.userName,
+  email: 'hong@example.com', // 이메일은 별도로 관리
+  role: userStore.roleName
+}))
 
 // ============================================
 // 메뉴 데이터
@@ -372,7 +376,7 @@ const showConfirmAlert = (message, title = '확인', onConfirm = null, onCancel 
 // ============================================
 
 /**
- * 로그아웃 처리 (SweetAlert2)
+ * 로그아웃 처리 (SweetAlert2 + Pinia)
  */
 const handleLogout = () => {
   showConfirmAlert(
@@ -380,7 +384,11 @@ const handleLogout = () => {
     '로그아웃 확인',
     () => {
       console.log('로그아웃 처리')
+      // Pinia store에서 사용자 정보 제거
+      userStore.clearUser()
+      // 선택된 메뉴 정보 제거
       localStorage.removeItem('selectedMenu')
+      // 로그인 페이지로 이동
       router.push('/learning/login')
     },
     () => {
@@ -394,9 +402,12 @@ const handleLogout = () => {
 // ============================================
 
 /**
- * 컴포넌트 마운트 시 메뉴 목록 조회
+ * 컴포넌트 마운트 시 초기화
  */
 onMounted(() => {
+  // Pinia store에서 사용자 정보 로드
+  userStore.loadUserFromStorage()
+  // 메뉴 목록 조회
   getMenuList()
 })
   </script>

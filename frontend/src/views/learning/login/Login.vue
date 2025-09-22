@@ -14,11 +14,11 @@
 
           <form class="login-form" @submit.prevent="handleLogin">
             <div class="form-group">
-              <label for="id" class="form-label">아이디</label>
+              <label for="userId" class="form-label">아이디</label>
               <input 
                 type="text" 
-                id="id" 
-                v-model="loginForm.id"
+                id="userId" 
+                v-model="loginForm.userId"
                 placeholder="아이디을 입력해주세요"
                 class="form-input"
                 required
@@ -45,8 +45,9 @@
               </label>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg mov03" style="width: 100%; margin-bottom: 15px; color: white;">
-              로그인
+            <button type="submit" class="btn btn-primary btn-lg mov03" style="width: 100%; margin-bottom: 15px; color: white;" :disabled="isLoading">
+              <i v-if="isLoading" class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>
+              {{ isLoading ? '로그인 중...' : '로그인' }}
             </button>
             
             <div class="form-links-bottom">
@@ -76,7 +77,10 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '/src/stores/userStore.js'
 import SignupPopup from '/src/views/learning/login/SignupPopup.vue'
+import Swal from 'sweetalert2'
+import api from '/src/util/api.js'
 import '../common.css'
 
 export default {
@@ -86,20 +90,144 @@ export default {
   },
   setup() {
     const router = useRouter()
+    const userStore = useUserStore()
     
     const loginForm = ref({
-      id: '',
+      userId: '',
       password: ''
     })
     const rememberMe = ref(false)
     const showSignupPopup = ref(false)
+    const isLoading = ref(false)
 
     const goBack = () => {
       router.push('/')
     }
 
-    const handleLogin = () => {
-      router.push('/learning/main')
+    const handleLogin = async () => {
+      if (!loginForm.value.userId.trim() || !loginForm.value.password.trim()) {
+        Swal.fire({
+          title: '입력 오류',
+          text: '아이디와 비밀번호를 입력해주세요.',
+          icon: 'warning',
+          confirmButtonText: '확인'
+        })
+        return
+      }
+
+      // 로그인 방식 선택 컨펌 팝업
+      const result = await Swal.fire({
+        title: '로그인 방식 선택',
+        text: '어떤 방식으로 로그인하시겠습니까?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '실제 API 통신',
+        cancelButtonText: '목업 데이터 사용',
+        reverseButtons: true,
+        allowOutsideClick: false,
+        allowEscapeKey: true
+      })
+
+      if (result.dismiss === Swal.DismissReason.cancel) {
+        // 목업 데이터 사용
+        await loginWithMockData()
+      } else if (result.isConfirmed) {
+        // 실제 API 통신
+        await loginWithApi()
+      }
+    }
+
+    // 목업 데이터로 로그인
+    const loginWithMockData = async () => {
+      try {
+        isLoading.value = true
+        
+        // 목업 로그인 데이터
+        const mockUserData = {
+          userId: loginForm.value.userId,
+          userName: '홍길동',
+          roleId: 'ADMIN',
+          roleName: '관리자'
+        }
+        
+        // Pinia store에 사용자 정보 저장
+        userStore.setUser(mockUserData)
+        
+        // 성공 알림
+        Swal.fire({
+          title: '로그인 성공 (목업)',
+          text: '목업 데이터로 로그인되었습니다!',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        })
+        
+        // 메인 페이지로 이동
+        setTimeout(() => {
+          router.push('/learning/main')
+        }, 1500)
+        
+      } catch (error) {
+        console.error('목업 로그인 오류:', error)
+        Swal.fire({
+          title: '로그인 실패',
+          text: '목업 로그인 중 오류가 발생했습니다.',
+          icon: 'error',
+          confirmButtonText: '확인'
+        })
+      } finally {
+        isLoading.value = false
+      }
+    }
+
+    // 실제 API로 로그인
+    const loginWithApi = async () => {
+      try {
+        isLoading.value = true
+        
+        // 실제 로그인 API 호출
+        const response = await api.post('/api/auth/login', loginForm.value)
+        
+        if (response?.body) {
+          // API 응답에서 사용자 정보 추출
+          const userData = {
+            userId: response.body.userId || loginForm.value.userId,
+            userName: response.body.userName,
+            roleId: response.body.roleId,
+            roleName: response.body.roleName
+          }
+          
+          // Pinia store에 사용자 정보 저장
+          userStore.setUser(userData)
+          
+          // 성공 알림
+          Swal.fire({
+            title: '로그인 성공 (API)',
+            text: 'API 통신으로 로그인되었습니다!',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false
+          })
+          
+          // 메인 페이지로 이동
+          setTimeout(() => {
+            router.push('/learning/main')
+          }, 1500)
+        } else {
+          throw new Error('API 응답이 올바르지 않습니다.')
+        }
+        
+      } catch (error) {
+        console.error('API 로그인 오류:', error)
+        Swal.fire({
+          title: '로그인 실패',
+          text: '아이디 또는 비밀번호가 올바르지 않습니다.',
+          icon: 'error',
+          confirmButtonText: '확인'
+        })
+      } finally {
+        isLoading.value = false
+      }
     }
 
     const openSignupPopup = () => {
@@ -118,6 +246,7 @@ export default {
       loginForm,
       rememberMe,
       showSignupPopup,
+      isLoading,
       goBack,
       handleLogin,
       openSignupPopup,
