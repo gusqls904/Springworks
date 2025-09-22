@@ -139,15 +139,6 @@
       :edit-user="editUser"
     />
 
-    <!-- 삭제 확인 팝업 -->
-    <AlertPopup
-      :visible="deleteConfirmVisible"
-      :title="'사용자 삭제'"
-      :message="'정말로 이 사용자를 삭제하시겠습니까?'"
-      :type="'warning'"
-      @confirm="confirmDelete"
-      @cancel="cancelDelete"
-    />
   </div>
 </template>
 
@@ -157,14 +148,13 @@ import { api } from '/src/util/api.js'
 import { getUserMockData, deleteUserMockData } from '../../mock/userMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
 import UserPopup from './UserPopup.vue'
-import AlertPopup from '../../../components/AlertPopup.vue'
+import Swal from 'sweetalert2'
 import '../common.css'
 
 export default {
   name: 'Users',
   components: {
-    UserPopup,
-    AlertPopup
+    UserPopup
   },
   setup() {
     // 상태
@@ -177,9 +167,6 @@ export default {
     const userPopupVisible = ref(false)
     const editUser = ref(null)
     
-    // 삭제 확인 팝업 상태
-    const deleteConfirmVisible = ref(false)
-    const userToDelete = ref(null)
 
     // 페이지네이션
     const currentPage = ref(1)
@@ -275,11 +262,23 @@ export default {
     }
 
     /**
-     * 사용자 삭제 (컨펌 팝업 표시)
+     * 사용자 삭제 (SweetAlert2 컨펌 팝업 표시)
      */
-    const deleteUser = (userId) => {
-      userToDelete.value = userId
-      deleteConfirmVisible.value = true
+    const deleteUser = async (userId) => {
+      const result = await Swal.fire({
+        title: '사용자 삭제',
+        text: '정말로 이 사용자를 삭제하시겠습니까?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
+        allowOutsideClick: false,
+        allowEscapeKey: true
+      })
+      
+      if (result.isConfirmed) {
+        await confirmDelete(userId)
+      }
     }
 
     /**
@@ -299,9 +298,7 @@ export default {
     /**
      * 삭제 확인 처리
      */
-    const confirmDelete = async () => {
-      if (!userToDelete.value) return
-      
+    const confirmDelete = async (userId) => {
       try {
         loading.value = true
         
@@ -309,35 +306,38 @@ export default {
         await callApiOrMock(
           // 실제 API 호출
           async () => {
-            return await api.post('/api/user/deleteUser', { userId: userToDelete.value })
+            return await api.post('/api/user/deleteUser', { userId: userId })
           },
           // 목업 데이터 호출
           async () => {
-            return deleteUserMockData(userToDelete.value)
+            return deleteUserMockData(userId)
           }
         )
         
         // 삭제 성공 시 목록 재조회
         await getUsers()
         
-        // 팝업 닫기
-        deleteConfirmVisible.value = false
-        userToDelete.value = null
+        // 성공 토스트 표시
+        Swal.fire({
+          title: '삭제 완료',
+          text: '사용자가 성공적으로 삭제되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        })
         
       } catch (error) {
         console.error('사용자 삭제 오류:', error)
+        Swal.fire({
+          title: '삭제 실패',
+          text: '사용자 삭제 중 오류가 발생했습니다.',
+          icon: 'error'
+        })
       } finally {
         loading.value = false
       }
     }
 
-    /**
-     * 삭제 취소 처리
-     */
-    const cancelDelete = () => {
-      deleteConfirmVisible.value = false
-      userToDelete.value = null
-    }
 
     /**
      * 검색 플레이스홀더 동적 생성
@@ -379,11 +379,10 @@ export default {
       users, loading, searchQuery, searchType,
       currentPage, totalPages, totalCount, pageSize,
       userPopupVisible, editUser,
-      deleteConfirmVisible, userToDelete,
       // 계산값
       visiblePages,
       // 메서드
-      getUsers, searchUsers, goToPage, goToAddUser, editUserHandler, deleteUser, formatDate, getSearchPlaceholder, getStatusClass, handleUserSaved, handleRefreshList, confirmDelete, cancelDelete
+      getUsers, searchUsers, goToPage, goToAddUser, editUserHandler, deleteUser, formatDate, getSearchPlaceholder, getStatusClass, handleUserSaved, handleRefreshList, confirmDelete
     }
   }
 }

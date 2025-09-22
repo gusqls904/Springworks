@@ -1,4 +1,5 @@
 <template>
+
   <div class="minimal-layout flex">
     <!-- 미니멀 사이드바 -->
     <aside class="minimal-sidebar" :class="{ 'expanded': sidebarExpanded }">
@@ -25,9 +26,16 @@
       </div>
       
       <nav class="sidebar-nav">
-        <div v-for="menu in menus" :key="menu.name" 
+        <!-- 로딩 상태 -->
+        <div v-if="menuLoading" class="nav-loading" style="padding: 20px; text-align: center; color: #64748b;">
+          <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>
+          메뉴 로딩 중...
+        </div>
+        
+        <!-- 메뉴 목록 -->
+        <div v-else v-for="menu in menus" :key="menu.menuId" 
              class="nav-item flex" 
-             :class="{ 'active': selectedMenu.name === menu.name }"
+             :class="{ 'active': selectedMenu?.menuId === menu.menuId }"
              @click="selectMenu(menu)"
              :title="sidebarExpanded ? menu.title : menu.title"
              :style="{ 
@@ -52,7 +60,7 @@
             whiteSpace: 'nowrap',
             transition: 'all 0.3s ease'
           }">{{ menu.title }}</span>
-          <div class="nav-indicator" v-if="selectedMenu.name === menu.name && sidebarExpanded" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 4px; height: 20px; background: var(--primary-color); border-radius: 2px;"></div>
+          <div class="nav-indicator" v-if="selectedMenu?.menuId === menu.menuId && sidebarExpanded" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 4px; height: 20px; background: var(--primary-color); border-radius: 2px;"></div>
         </div>
       </nav>
       
@@ -117,8 +125,8 @@
       <!-- 상단 헤더 -->
       <header class="minimal-header flex" style="justify-content: space-between; align-items: center;">
         <div class="header-left">
-          <h1 class="title" style="margin: 0 0 4px 0;">{{ selectedMenu.title }}</h1>
-          <p class="subtitle" style="margin: 0;">{{ selectedMenu.description }}</p>
+          <h1 class="title" style="margin: 0 0 4px 0;">{{ selectedMenu?.title || '로딩 중...' }}</h1>
+          <p class="subtitle" style="margin: 0;">{{ selectedMenu?.description || '' }}</p>
         </div>
         
         <div class="header-right flex" style="align-items: center; gap: 16px;">
@@ -150,58 +158,50 @@
         <!-- 동적 컴포넌트 렌더링 -->
         <component 
           :is="currentComponent" 
-          v-if="currentComponent"
+          v-if="currentComponent && selectedMenu"
           :class="`${selectedMenu.name}-wrapper`"
         />
 
       </div>
     </main>
 
-    <!-- 알러트 팝업 -->
-    <AlertPopup
-      :visible="alertVisible"
-      @update:visible="alertVisible = $event"
-      :title="alertTitle"
-      :message="alertMessage"
-      :type="alertType"
-      @confirm="handleAlertConfirm"
-      @cancel="handleAlertCancel"
-    />
   </div>
   </template>
   
   <script setup>
-  import { ref, computed } from 'vue'
-  import { useRouter } from 'vue-router'
-  import Board from './board/Board.vue'
-  import QnA from './qna/QnA.vue'
-  import Dashboard from './dashboard/dashboard.vue'
-  import Analytics from './analytics/Analytics.vue'
-  import Users from './users/Users.vue'
-  import Courses from './courses/Courses.vue'
-  import Settings from './settings/Settings.vue'
-  import AlertPopup from '../../components/AlertPopup.vue'
-  import { isMockMode as getMockMode, toggleMockMode } from '/src/util/mockConfig.js'
-  import './common.css'
+
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import Board from './board/Board.vue'
+import QnA from './qna/QnA.vue'
+import Dashboard from './dashboard/dashboard.vue'
+import Analytics from './analytics/Analytics.vue'
+import Users from './users/Users.vue'
+import Courses from './courses/Courses.vue'
+import Settings from './settings/Settings.vue'
+import { isMockMode as getMockMode, toggleMockMode } from '/src/util/mockConfig.js'
+import { getMenuMockData } from '/src/views/mock/menuMockData.js'
+import { useToast } from "vue-toastification"
+import Swal from 'sweetalert2'
+import api from '/src/util/api.js'
+import './common.css'
   
 // Router 초기화
 const router = useRouter()
 
+// ============================================
 // 상태 관리
+// ============================================
 const sidebarExpanded = ref(true)
 const sidebarProfileMenuOpen = ref(false)
-
-// 목업 모드 상태
 const isMockMode = ref(getMockMode())
 
-// 알러트 팝업 상태
-const alertVisible = ref(false)
-const alertTitle = ref('알림')
-const alertMessage = ref('')
-const alertType = ref('info')
-const alertCallback = ref(null)
+// Vue Toastification
+const toast = useToast()
 
+// ============================================
 // 컴포넌트 매핑
+// ============================================
 const components = {
   Dashboard,
   Board,
@@ -211,148 +211,198 @@ const components = {
   Courses,
   Settings
 }
-  
+
+// ============================================
   // 사용자 정보
+
+// ============================================
   const user = ref({
     id: 1,
     name: '홍길동',
-    email: 'hong@example.com',
-    role: '관리자'
-  })
-  
-  // 메뉴
-  const menus = ref([
-    { 
-      name: 'dashboard', 
-      title: '대시보드', 
-      icon: 'fas fa-tachometer-alt',
-      description: '내부에 무슨 기능 추가 할지 생각 중',
-      component: 'Dashboard'
-    },
-    { 
-      name: 'board', 
-      title: '게시판', 
-      icon: 'fas fa-clipboard-list',
-      description: '나중에 사용자 질문 관리 할지 생각 중',
-      component: 'Board'
-    },
-    { 
-      name: 'qna', 
-      title: 'Q&A', 
-      icon: 'fas fa-question-circle',
-      description: '학생 질문과 답변을 관리하세요',
-      component: 'QnA'
-    },
-    { 
-      name: 'users', 
-      title: '사용자', 
-      icon: 'fas fa-users',
-      description: '사용자를 관리하세요',
-      component: 'Users'
-    },
-    { 
-      name: 'courses', 
-      title: '강의', 
-      icon: 'fas fa-book',
-      description: '강의를 관리하세요',
-      component: 'Courses'
-    },
-    { 
-      name: 'analytics', 
-      title: '분석', 
-      icon: 'fas fa-chart-line',
-      description: '데이터를 분석하세요',
-      component: 'Analytics'
-    },
-    { 
-      name: 'settings', 
-      title: '설정', 
-      icon: 'fas fa-cog',
-      description: '시스템을 설정하세요',
-      component: 'Settings'
-    }
-  ])
 
-// 선택된 메뉴 - localStorage에서 복원하거나 기본값 사용
-const getInitialMenu = () => {
-  const savedMenu = localStorage.getItem('selectedMenu')
-  if (savedMenu) {
-    const menu = menus.value.find(m => m.name === savedMenu)
-    return menu || menus.value[0]
+  email: 'hong@example.com',
+  role: '관리자'
+})
+
+// ============================================
+// 메뉴 데이터
+// ============================================
+const menus = ref([])
+const selectedMenu = ref(null)
+const menuLoading = ref(true)
+
+// ============================================
+// 메뉴 관련 함수
+// ============================================
+
+/**
+ * 메뉴 목록 조회
+ */
+const getMenuList = async () => {
+  menuLoading.value = true
+  
+  try {
+    // 실제 API 호출 (목업 버튼과 무관)
+    const response = await api.post('/api/common/getMenuList', {})
+    
+    if (response?.body?.menuList) {
+      menus.value = response.body.menuList.sort((a, b) => a.orderNo - b.orderNo)
+      restoreSelectedMenu()
+      menuLoading.value = false
+        console.log('✅ 메뉴 목록 조회 성공 (실제 API)')
+        toast.success('메뉴가 성공적으로 로드되었습니다.')
+    }
+  } catch (error) {
+    console.error('메뉴 목록 조회 실패:', error)
+    console.log('🔄 목업 데이터로 폴백 시도...')
+    
+    try {
+      // API 실패 시 목업 데이터로 폴백
+      const mockResponse = await getMenuMockData({})
+      
+      if (mockResponse?.body?.menuList) {
+        menus.value = mockResponse.body.menuList.sort((a, b) => a.orderNo - b.orderNo)
+        restoreSelectedMenu()
+        menuLoading.value = false
+        
+        toast.warning('서버 연결에 실패하여 기본 메뉴를 표시합니다.', {
+          title: '연결 오류'
+        })
+        console.log('✅ 목업 데이터로 폴백 성공')
+      }
+    } catch (mockError) {
+      console.error('목업 데이터 로드도 실패:', mockError)
+      menuLoading.value = false
+      toast.error('메뉴를 불러올 수 없습니다. 페이지를 새로고침해주세요.', {
+        title: '오류'
+      })
+    }
   }
-  return menus.value[0]
 }
 
-const selectedMenu = ref(getInitialMenu())
+/**
+ * 메뉴 선택
+ */
 const selectMenu = (menu) => {
   selectedMenu.value = menu
-  localStorage.setItem('selectedMenu', menu.name)
+  localStorage.setItem('selectedMenu', menu.menuId.toString())
+}
+
+/**
+ * localStorage에서 저장된 메뉴 복원
+ */
+const restoreSelectedMenu = () => {
+  const savedMenuId = localStorage.getItem('selectedMenu')
+  if (savedMenuId && menus.value.length > 0) {
+    const savedMenu = menus.value.find(m => m.menuId.toString() === savedMenuId)
+    if (savedMenu) {
+      selectedMenu.value = savedMenu
+      return
+    }
+  }
+  // 저장된 메뉴가 없으면 첫 번째 메뉴 선택
+  if (menus.value.length > 0) {
+    selectedMenu.value = menus.value[0]
+  }
 }
   
-  // 현재 컴포넌트 계산
-  const currentComponent = computed(() => {
-    return components[selectedMenu.value.component] || null
-  })
-  
-  // 사이드바 프로필 메뉴 토글
-  const toggleSidebarProfileMenu = () => {
-    sidebarProfileMenuOpen.value = !sidebarProfileMenuOpen.value
-  }
-  
-  // 목업 모드 토글
-  const handleToggleMockMode = () => {
-    const newMode = toggleMockMode()
-    isMockMode.value = newMode
-    console.log(`🔧 목업 모드가 ${newMode ? '활성화' : '비활성화'}되었습니다.`)
-  }
+// ============================================
+// 계산된 속성
+// ============================================
 
-  // 알러트 표시 함수
-  const showAlert = (message, type = 'info', title = '알림', callback = null) => {
-    alertMessage.value = message
-    alertType.value = type
-    alertTitle.value = title
-    alertCallback.value = callback
-    alertVisible.value = true
-  }
+/**
+ * 현재 컴포넌트 계산
+ */
+const currentComponent = computed(() => {
+  if (!selectedMenu.value) return null
+  return components[selectedMenu.value.component] || null
+})
 
-  // 알러트 확인 처리
-  const handleAlertConfirm = () => {
-    if (alertCallback.value) {
-      alertCallback.value()
+// ============================================
+// UI 이벤트 핸들러
+// ============================================
+
+/**
+ * 사이드바 프로필 메뉴 토글
+ */
+const toggleSidebarProfileMenu = () => {
+  sidebarProfileMenuOpen.value = !sidebarProfileMenuOpen.value
+}
+
+/**
+ * 목업 모드 토글
+ */
+const handleToggleMockMode = () => {
+  const newMode = toggleMockMode()
+  isMockMode.value = newMode
+  console.log(`🔧 목업 모드가 ${newMode ? '활성화' : '비활성화'}되었습니다.`)
+  toast.info(`목업 모드가 ${newMode ? '활성화' : '비활성화'}되었습니다.`)
+}
+
+// ============================================
+// 알러트 관련 함수 (SweetAlert2)
+// ============================================
+
+/**
+ * 확인 알러트 (SweetAlert2)
+ */
+const showConfirmAlert = (message, title = '확인', onConfirm = null, onCancel = null) => {
+  Swal.fire({
+    title: title,
+    text: message,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: '확인',
+    cancelButtonText: '취소',
+    // reverseButtons: true,
+    // allowOutsideClick: false,
+    // allowEscapeKey: true
+  }).then((result) => {
+    if (result.isConfirmed && onConfirm) {
+      onConfirm()
+    } else if (result.dismiss === Swal.DismissReason.cancel && onCancel) {
+      onCancel()
     }
-    alertVisible.value = false
-    alertCallback.value = null
-  }
+  })
+}
 
-  // 알러트 취소 처리
-  const handleAlertCancel = () => {
-    alertVisible.value = false
-    alertCallback.value = null
-  }
 
-  // 로그아웃 처리
-  const handleLogout = () => {
-    showAlert(
-      '정말 로그아웃 하시겠습니까?',
-      'warning',
-      '로그아웃 확인',
-      () => {
-        // 로그아웃 로직 구현
-        console.log('로그아웃 처리')
-        
-        // 로컬 스토리지 정리 (선택사항)
-        localStorage.removeItem('selectedMenu')
-        
-        // 로그인 페이지로 이동
-        router.push('/learning/login')
-      }
-    )
-  }
-  
+// ============================================
+// 인증 관련 함수
+// ============================================
 
+/**
+ * 로그아웃 처리 (SweetAlert2)
+ */
+const handleLogout = () => {
+  showConfirmAlert(
+    '정말 로그아웃 하시겠습니까?',
+    '로그아웃 확인',
+    () => {
+      console.log('로그아웃 처리')
+      localStorage.removeItem('selectedMenu')
+      router.push('/learning/login')
+    },
+    () => {
+      console.log('로그아웃 취소')
+    }
+  )
+}
+
+// ============================================
+// 라이프사이클
+// ============================================
+
+/**
+ * 컴포넌트 마운트 시 메뉴 목록 조회
+ */
+onMounted(() => {
+  getMenuList()
+})
   </script>
   
   <style scoped>
+
 /* ============================================
    MINIMAL SIDEBAR LAYOUT STYLES
    ============================================ */
@@ -407,6 +457,7 @@ const selectMenu = (menu) => {
     border-radius: 8px;
   }
   
+
 .nav-item:hover {
   background: #f1f5f9;
   color: #475569;
@@ -543,6 +594,8 @@ const selectMenu = (menu) => {
   
   /* Responsive styles for individual components */
   }
+
   </style>
+
   
   

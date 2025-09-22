@@ -1,0 +1,338 @@
+/**
+ * Vue Toastification & SweetAlert2 커스텀 스타일
+ * 현재 미니멀 레이아웃에 맞게 커스터마이징
+ */
+
+/* ============================================
+   토스트 컨테이너 커스터마이징
+   ============================================ */
+   .Vue-Toastification__container {
+  z-index: 9999 !important;
+}
+
+/* ============================================
+   토스트 기본 스타일
+   ============================================ */
+.Vue-Toastification__toast {
+  background: var(--bg-white, #ffffff) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-left: 4px solid !important;
+  min-height: 60px !important;
+  padding: 16px !important;
+  margin-bottom: 8px !important;
+  font-family: 'Roboto', 'Noto Sans KR', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.2px !important;
+}
+
+.Vue-Toastification__toast:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ============================================
+   토스트 타입별 색상
+   ============================================ */
+.Vue-Toastification__toast--success {
+  border-left-color: #10b981 !important;
+  color: #065f46 !important;
+}
+
+.Vue-Toastification__toast--success .Vue-Toastification__icon {
+  color: #10b981 !important;
+}
+
+.Vue-Toastification__toast--error {
+  border-left-color: #ef4444 !important;
+  color: #991b1b !important;
+}
+
+.Vue-Toastification__toast--error .Vue-Toastification__icon {
+  color: #ef4444 !important;
+}
+
+.Vue-Toastification__toast--warning {
+  border-left-color: #f59e0b !important;
+  color: #92400e !important;
+}
+
+.Vue-Toastification__toast--warning .Vue-Toastification__icon {
+  color: #f59e0b !important;
+}
+
+.Vue-Toastification__toast--info {
+  border-left-color: #3b82f6 !important;
+  color: #1e40af !important;
+}
+
+.Vue-Toastification__toast--info .Vue-Toastification__icon {
+  color: #3b82f6 !important;
+}
+
+/* ============================================
+   토스트 내용 스타일
+   ============================================ */
+.Vue-Toastification__toast-body {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.5 !important;
+}
+
+.Vue-Toastification__toast-title {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  margin-bottom: 4px !important;
+  color: inherit !important;
+  letter-spacing: -0.2px !important;
+}
+
+.Vue-Toastification__toast-text {
+  font-size: 13px !important;
+  color: #6b7280 !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.2px !important;
+}
+
+/* ============================================
+   아이콘 스타일
+   ============================================ */
+.Vue-Toastification__icon {
+  font-size: 20px !important;
+  margin-right: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+/* ============================================
+   닫기 버튼 스타일
+   ============================================ */
+.Vue-Toastification__close-button {
+  color: #9ca3af !important;
+  font-size: 12px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: 12px !important;
+}
+
+.Vue-Toastification__close-button:hover {
+  color: #6b7280 !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ============================================
+   프로그레스 바 스타일
+   ============================================ */
+.Vue-Toastification__progress-bar {
+  height: 3px !important;
+  border-radius: 0 0 8px 8px !important;
+}
+
+.Vue-Toastification__toast--success .Vue-Toastification__progress-bar {
+  background: #10b981 !important;
+}
+
+.Vue-Toastification__toast--error .Vue-Toastification__progress-bar {
+  background: #ef4444 !important;
+}
+
+.Vue-Toastification__toast--warning .Vue-Toastification__progress-bar {
+  background: #f59e0b !important;
+}
+
+.Vue-Toastification__toast--info .Vue-Toastification__progress-bar {
+  background: #3b82f6 !important;
+}
+
+/* ============================================
+   반응형 디자인
+   ============================================ */
+@media (max-width: 480px) {
+  .Vue-Toastification__toast {
+    min-width: 280px !important;
+    max-width: calc(100vw - 32px) !important;
+    margin: 0 16px 8px 16px !important;
+  }
+  
+  .Vue-Toastification__container {
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================
+   다크 모드 지원
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .Vue-Toastification__toast {
+    background: #1f2937 !important;
+    color: #f9fafb !important;
+  }
+  
+  .Vue-Toastification__toast-text {
+    color: #d1d5db !important;
+  }
+  
+  .Vue-Toastification__close-button {
+    color: #9ca3af !important;
+  }
+  
+  .Vue-Toastification__close-button:hover {
+    color: #d1d5db !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+/* ============================================
+   애니메이션 커스터마이징
+   ============================================ */
+.Vue-Toastification__toast--default {
+  transition: all 0.3s ease !important;
+}
+
+/* ============================================
+   드래그 스타일
+   ============================================ */
+.Vue-Toastification__toast--dragging {
+  transform: rotate(5deg) !important;
+  opacity: 0.8 !important;
+}
+
+/* ============================================
+   SWEETALERT2 CUSTOM STYLES (common.css 스타일 참조)
+   ============================================ */
+
+/* SweetAlert2 기본 스타일 오버라이드 - 폰트만 common.css 참조 */
+.swal2-popup {
+  font-family: 'Roboto', 'Noto Sans KR', sans-serif !important;
+  max-width: 400px !important;
+  width: 100% !important;
+  padding: 20px !important;
+  min-height: 100px !important;
+}
+
+.swal2-title {
+  font-size: 20px !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.06em !important;
+}
+
+.swal2-html-container {
+  font-size: 14px !important;
+  font-weight: 300 !important;
+}
+
+/* 아이콘 스타일 - 기본 SweetAlert2 스타일 유지 */
+
+/* 버튼 컨테이너 - 버튼 위치 변경 */
+.swal2-actions {
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+/* 버튼 순서 변경 (확인 버튼이 오른쪽에 오도록) */
+.swal2-actions .swal2-confirm {
+  order: 2 !important;
+  /* common.css btn-primary 스타일 적용 */
+  background: var(--primary-color) !important;
+  border: 1px solid transparent !important;
+  color: white !important;
+  border-radius: 6px !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+}
+
+.swal2-actions .swal2-confirm:hover {
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-primary) !important;
+}
+
+.swal2-actions .swal2-confirm:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(74, 144, 164, 0.2) !important;
+}
+
+.swal2-actions .swal2-cancel {
+  order: 1 !important;
+  /* common.css btn-secondary 스타일 적용 */
+  background: transparent !important;
+  color: #6b7280 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+}
+
+.swal2-actions .swal2-cancel:hover {
+  background: #f9fafb !important;
+  border-color: #9ca3af !important;
+}
+
+.swal2-actions .swal2-cancel:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(74, 144, 164, 0.2) !important;
+}
+
+/* 반응형 폰트 사이즈 - common.css 반응형 참조 */
+@media (max-width: 768px) {
+  .swal2-title {
+    font-size: 18px !important;
+  }
+  
+  .swal2-html-container {
+    font-size: 13px !important;
+  }
+  
+  .Vue-Toastification__toast {
+    font-size: 13px !important;
+  }
+  
+  .Vue-Toastification__toast-title {
+    font-size: 13px !important;
+  }
+  
+  .Vue-Toastification__toast-text {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .swal2-title {
+    font-size: 16px !important;
+  }
+  
+  .swal2-html-container {
+    font-size: 12px !important;
+  }
+  
+  .Vue-Toastification__toast {
+    font-size: 12px !important;
+  }
+  
+  .Vue-Toastification__toast-title {
+    font-size: 12px !important;
+  }
+  
+  .Vue-Toastification__toast-text {
+    font-size: 11px !important;
+  }
+}

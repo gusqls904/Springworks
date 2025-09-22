@@ -188,16 +188,6 @@
       </div>
     </div>
 
-    <!-- 알러트 팝업 -->
-    <AlertPopup
-      :visible="alertVisible"
-      @update:visible="alertVisible = $event"
-      :title="alertTitle"
-      :message="alertMessage"
-      :type="alertType"
-      @confirm="handleAlertConfirm"
-      @cancel="handleAlertCancel"
-    />
   </div>
 </template>
 
@@ -207,13 +197,12 @@ import { useRouter } from 'vue-router'
 import { api } from '/src/util/api.js'
 import { getQnAMockData } from '../../mock/qnaMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
-import AlertPopup from '../../../components/AlertPopup.vue'
+import Swal from 'sweetalert2'
 import '../common.css'
 
 export default {
   name: 'QnA',
   components: {
-    AlertPopup
   },
   setup() {
     const router = useRouter()
@@ -231,12 +220,6 @@ export default {
     const answerContent = ref('')
     const isSaving = ref(false)
 
-    // 알러트 팝업 상태
-    const alertVisible = ref(false)
-    const alertTitle = ref('알림')
-    const alertMessage = ref('')
-    const alertType = ref('info')
-    const alertCallback = ref(null)
 
     // 페이지네이션
     const currentPage = ref(1)
@@ -251,29 +234,23 @@ export default {
       return Array.from({ length: end - start + 1 }, (_, i) => start + i)
     })
 
-    // 알러트 표시 함수
-    const showAlert = (message, type = 'info', title = '알림', callback = null) => {
-      alertMessage.value = message
-      alertType.value = type
-      alertTitle.value = title
-      alertCallback.value = callback
-      alertVisible.value = true
-    }
-
-    // 알러트 확인 처리
-    const handleAlertConfirm = () => {
-      if (alertCallback.value) {
-        alertCallback.value()
+    // 알러트 표시 함수 (SweetAlert2)
+    const showAlert = async (message, type = 'info', title = '알림', callback = null) => {
+      const result = await Swal.fire({
+        title: title,
+        text: message,
+        icon: type,
+        confirmButtonText: '확인',
+        allowOutsideClick: false,
+        allowEscapeKey: true
+      })
+      
+      if (callback && typeof callback === 'function') {
+        callback(result)
       }
-      alertVisible.value = false
-      alertCallback.value = null
     }
 
-    // 알러트 취소 처리
-    const handleAlertCancel = () => {
-      alertVisible.value = false
-      alertCallback.value = null
-    }
+
 
     /**
      * Q&A 목록 로드
@@ -484,13 +461,12 @@ export default {
       selectedQnA, answerContent, isSaving,
       currentPage, totalPages, totalCount, pageSize,
       // 알러트 팝업 상태
-      alertVisible, alertTitle, alertMessage, alertType,
       // 계산값
       visiblePages,
       // 메서드
       getQnAList, searchQnAs, goToPage, selectQnA, closeDetail, saveAnswer, markAsCompleted, formatDate, getSearchPlaceholder, getStatusClass, getStatusText,
       // 알러트 메서드
-      showAlert, handleAlertConfirm, handleAlertCancel
+      showAlert
     }
   }
 }

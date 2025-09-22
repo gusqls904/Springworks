@@ -76,6 +76,12 @@ window.getMockStatus = () => {
   }
 }
 
+// 메뉴 목업 데이터는 별도 파일에서 관리
+import { getMenuMockData } from '/src/views/mock/menuMockData.js'
+
+// getMenuMockData 함수 re-export
+export { getMenuMockData }
+
 console.log('🚀 목업 설정 시스템 초기화됨')
 console.log('📊 현재 상태:', window.getMockStatus())
 console.log('💡 사용법: toggleMockMode() - 목업 모드 전환')
