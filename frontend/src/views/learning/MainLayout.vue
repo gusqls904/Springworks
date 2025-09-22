@@ -68,7 +68,8 @@
       <div class="sidebar-profile" :style="{ 
         padding: sidebarExpanded ? '20px' : '12px',
         borderTop: '1px solid var(--border-light)',
-        marginTop: 'auto'
+        marginTop: 'auto',
+        position: 'relative'
       }">
         <div class="profile-container flex" :style="{ 
           alignItems: 'center', 
@@ -116,6 +117,123 @@
             transform: sidebarProfileMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)'
           }"></i>
         </div>
+        
+        <!-- 프로필 드롭다운 메뉴 -->
+        <transition name="profile-slide">
+          <div v-if="sidebarProfileMenuOpen && sidebarExpanded" 
+               class="profile-dropdown"
+               :style="{
+                 position: 'absolute',
+                 bottom: '100%',
+                 left: '16px',
+                 right: '16px',
+                 padding: '4px 0',
+                 backgroundColor: 'var(--bg-white)',
+                 boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+                 borderRadius: '6px',
+                 zIndex: 1000,
+                 border: '1px solid var(--border-light)',
+                 transformOrigin: 'bottom center'
+               }">
+          <div 
+            @click="handleMyPage"
+            class="profile-menu-item"
+            :style="{
+              display: 'flex',
+              alignItems: 'center', 
+              gap: '12px', 
+              padding: '8px 16px', 
+              margin: '2px 6px', 
+              borderRadius: '6px', 
+              cursor: 'pointer', 
+              transition: 'all 0.3s ease', 
+              color: '#64748b',
+              justifyContent: 'flex-start'
+            }"
+            @mouseenter="$event.target.style.backgroundColor = '#f8fafc'"
+            @mouseleave="$event.target.style.backgroundColor = 'transparent'"
+          >
+            <i class="fas fa-user-cog" :style="{ 
+              fontSize: '16px', 
+              width: '18px', 
+              textAlign: 'center',
+              transition: 'all 0.3s ease'
+            }"></i>
+            <span :style="{ 
+              fontWeight: '500', 
+              fontSize: '14px',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.3s ease'
+            }">마이페이지</span>
+          </div>
+          
+          <!-- 목업 모드 토글 -->
+          <div 
+            @click="handleToggleMockMode"
+            class="profile-menu-item"
+            :style="{
+              display: 'flex',
+              alignItems: 'center', 
+              gap: '12px', 
+              padding: '8px 16px', 
+              margin: '2px 6px', 
+              borderRadius: '6px', 
+              cursor: 'pointer', 
+              transition: 'all 0.3s ease', 
+              color: isMockMode ? '#10b981' : '#64748b',
+              justifyContent: 'flex-start'
+            }"
+            @mouseenter="$event.target.style.backgroundColor = isMockMode ? '#f0fdf4' : '#f8fafc'"
+            @mouseleave="$event.target.style.backgroundColor = 'transparent'"
+          >
+            <i :class="isMockMode ? 'fas fa-toggle-on' : 'fas fa-toggle-off'" :style="{ 
+              fontSize: '16px', 
+              width: '18px', 
+              textAlign: 'center',
+              transition: 'all 0.3s ease',
+              color: isMockMode ? '#10b981' : '#64748b'
+            }"></i>
+            <span :style="{ 
+              fontWeight: '500', 
+              fontSize: '14px',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.3s ease'
+            }">{{ isMockMode ? '목업 모드 ON' : '목업 모드 OFF' }}</span>
+          </div>
+          
+          <div 
+            @click="handleLogout"
+            class="profile-menu-item"
+            :style="{
+              display: 'flex',
+              alignItems: 'center', 
+              gap: '12px', 
+              padding: '8px 16px', 
+              margin: '2px 6px', 
+              borderRadius: '6px', 
+              cursor: 'pointer', 
+              transition: 'all 0.3s ease', 
+              color: '#ef4444',
+              justifyContent: 'flex-start'
+            }"
+            @mouseenter="$event.target.style.backgroundColor = '#fef2f2'"
+            @mouseleave="$event.target.style.backgroundColor = 'transparent'"
+          >
+            <i class="fas fa-sign-out-alt" :style="{ 
+              fontSize: '16px', 
+              width: '18px', 
+              textAlign: 'center',
+              transition: 'all 0.3s ease'
+            }"></i>
+            <span :style="{ 
+              fontWeight: '500', 
+              fontSize: '14px',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.3s ease'
+            }">로그아웃</span>
+          </div>
+          </div>
+        </transition>
       </div>
       
     </aside>
@@ -130,25 +248,9 @@
         </div>
         
         <div class="header-right flex" style="align-items: center; gap: 16px;">
-          <!-- 목업 모드 토글 버튼 -->
-          <button 
-            class="btn btn-sm mock-toggle-btn" 
-            :class="{ 'active': isMockMode }"
-            @click="handleToggleMockMode"
-            :title="isMockMode ? '목업 모드 ON' : '목업 모드 OFF'"
-            style="position: relative; width: 40px; height: 40px; padding: 0;"
-          >
-            <i :class="isMockMode ? 'fas fa-database' : 'fas fa-server'"></i>
-            <span v-if="isMockMode" class="mock-indicator" style="position: absolute; top: -4px; right: -4px; background: #10b981; color: white; font-size: 8px; padding: 2px 4px; border-radius: 8px; min-width: 12px; text-align: center;">M</span>
-          </button>
-          
           <button class="btn btn-sm" style="position: relative; width: 40px; height: 40px; padding: 0;">
             <i class="fas fa-bell"></i>
             <span class="notification-count" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; min-width: 16px; text-align: center;">3</span>
-          </button>
-          
-          <button class="btn btn-sm" @click="handleLogout" style="width: 40px; height: 40px; padding: 0;">
-            <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
       </header>
@@ -376,6 +478,23 @@ const showConfirmAlert = (message, title = '확인', onConfirm = null, onCancel 
 // ============================================
 
 /**
+ * 마이페이지 이동
+ */
+const handleMyPage = () => {
+  console.log('마이페이지 이동')
+  // 프로필 메뉴 닫기
+  sidebarProfileMenuOpen.value = false
+  
+  // 토스트 메시지 표시
+  toast.info('마이페이지 기능은 준비 중입니다.', {
+    title: '알림'
+  })
+  
+  // TODO: 마이페이지 컴포넌트 구현 후 라우팅 처리
+  // router.push('/learning/mypage')
+}
+
+/**
  * 로그아웃 처리 (SweetAlert2 + Pinia)
  */
 const handleLogout = () => {
@@ -561,6 +680,82 @@ onMounted(() => {
 
 .sidebar-profile .profile-container:hover {
   background: var(--bg-light);
+}
+
+/* ============================================
+   PROFILE DROPDOWN ANIMATIONS
+   ============================================ */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+}
+
+.profile-dropdown {
+  overflow: hidden;
+}
+
+.profile-menu-item:hover {
+  background-color: #fef2f2 !important;
+  transform: translateX(4px);
+}
+
+.profile-menu-item:active {
+  transform: translateX(2px);
+}
+
+/* ============================================
+   PROFILE SLIDE TRANSITIONS
+   ============================================ */
+.profile-slide-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.profile-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.profile-slide-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.profile-slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.profile-slide-enter-to,
+.profile-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* ============================================
