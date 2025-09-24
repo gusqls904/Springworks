@@ -8,82 +8,6 @@
     </div>
 
     <div class="settings-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
-      <!-- 일반 설정 -->
-      <div class="card" style="padding: 24px;">
-        <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0 0 20px 0;">
-          <i class="fas fa-cog" style="margin-right: 8px;"></i>
-          일반 설정
-        </h3>
-        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
-          <div>
-            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">다크 모드</div>
-            <div style="font-size: 14px; color: #64748b;">어두운 테마를 사용합니다</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.darkMode">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
-          <div>
-            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">알림</div>
-            <div style="font-size: 14px; color: #64748b;">이메일 알림을 받습니다</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.notifications">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
-          <div>
-            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">자동 저장</div>
-            <div style="font-size: 14px; color: #64748b;">작업을 자동으로 저장합니다</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.autoSave">
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 보안 설정 -->
-      <div class="card" style="padding: 24px;">
-        <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0 0 20px 0;">
-          <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>
-          보안 설정
-        </h3>
-        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
-          <div>
-            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">2단계 인증</div>
-            <div style="font-size: 14px; color: #64748b;">추가 보안을 위해 활성화</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.twoFactor">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
-          <div>
-            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">세션 만료</div>
-            <div style="font-size: 14px; color: #64748b;">30분 후 자동 로그아웃</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.sessionTimeout">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
-          <div>
-            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">로그인 알림</div>
-            <div style="font-size: 14px; color: #64748b;">새로운 로그인 시 알림</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.loginAlerts">
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
       <!-- 계정 설정 -->
       <div class="card" style="padding: 24px;">
         <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0 0 20px 0;">
@@ -110,6 +34,94 @@
           <i class="fas fa-save"></i>
           설정 저장
         </button>
+      </div>
+
+      <!-- 일반 설정 -->
+      <div class="card" style="padding: 24px; position: relative;">
+        <div class="coming-soon-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.95); border-radius: 8px; display: flex; align-items: center; justify-content: center; z-index: 10; backdrop-filter: blur(2px);">
+          <div style="text-align: center; color: #64748b;">
+            <i class="fas fa-tools" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+            <div style="font-weight: 500;">추후 업데이트 예정</div>
+          </div>
+        </div>
+        <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0 0 20px 0;">
+          <i class="fas fa-cog" style="margin-right: 8px;"></i>
+          일반 설정
+        </h3>
+        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">다크 모드</div>
+            <div style="font-size: 14px; color: #64748b;">어두운 테마를 사용합니다</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="settings.darkMode" disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">알림</div>
+            <div style="font-size: 14px; color: #64748b;">이메일 알림을 받습니다</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="settings.notifications" disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+          <div>
+            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">자동 저장</div>
+            <div style="font-size: 14px; color: #64748b;">작업을 자동으로 저장합니다</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="settings.autoSave" disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 보안 설정 -->
+      <div class="card" style="padding: 24px; position: relative;">
+        <div class="coming-soon-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.95); border-radius: 8px; display: flex; align-items: center; justify-content: center; z-index: 10; backdrop-filter: blur(2px);">
+          <div style="text-align: center; color: #64748b;">
+            <i class="fas fa-tools" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+            <div style="font-weight: 500;">추후 업데이트 예정</div>
+          </div>
+        </div>
+        <h3 style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0 0 20px 0;">
+          <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>
+          보안 설정
+        </h3>
+        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">2단계 인증</div>
+            <div style="font-size: 14px; color: #64748b;">추가 보안을 위해 활성화</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="settings.twoFactor" disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">세션 만료</div>
+            <div style="font-size: 14px; color: #64748b;">30분 후 자동 로그아웃</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="settings.sessionTimeout" disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+          <div>
+            <div style="font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">로그인 알림</div>
+            <div style="font-size: 14px; color: #64748b;">새로운 로그인 시 알림</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="settings.loginAlerts" disabled>
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
   </div>

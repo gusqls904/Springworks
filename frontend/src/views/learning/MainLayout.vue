@@ -167,39 +167,6 @@
             }">마이페이지</span>
           </div>
           
-          <!-- 목업 모드 토글 -->
-          <div 
-            @click="handleToggleMockMode"
-            class="profile-menu-item"
-            :style="{
-              display: 'flex',
-              alignItems: 'center', 
-              gap: '12px', 
-              padding: '8px 16px', 
-              margin: '2px 6px', 
-              borderRadius: '6px', 
-              cursor: 'pointer', 
-              transition: 'all 0.3s ease', 
-              color: isMockMode ? '#10b981' : '#64748b',
-              justifyContent: 'flex-start'
-            }"
-            @mouseenter="$event.target.style.backgroundColor = isMockMode ? '#f0fdf4' : '#f8fafc'"
-            @mouseleave="$event.target.style.backgroundColor = 'transparent'"
-          >
-            <i :class="isMockMode ? 'fas fa-toggle-on' : 'fas fa-toggle-off'" :style="{ 
-              fontSize: '16px', 
-              width: '18px', 
-              textAlign: 'center',
-              transition: 'all 0.3s ease',
-              color: isMockMode ? '#10b981' : '#64748b'
-            }"></i>
-            <span :style="{ 
-              fontWeight: '500', 
-              fontSize: '14px',
-              whiteSpace: 'nowrap',
-              transition: 'all 0.3s ease'
-            }">{{ isMockMode ? '목업 모드 ON' : '목업 모드 OFF' }}</span>
-          </div>
           
           <div 
             @click="handleLogout"
@@ -248,6 +215,30 @@
         </div>
         
         <div class="header-right flex" style="align-items: center; gap: 16px;">
+          <!-- 목업 모드 토글 버튼 -->
+          <button 
+            @click="handleToggleMockMode"
+            class="btn btn-sm mock-toggle-btn"
+            :class="{ 'active': isMockMode }"
+            :style="{
+              position: 'relative',
+              width: '40px',
+              height: '40px',
+              padding: '0',
+              color: isMockMode ? '#10b981' : '#64748b',
+              border: isMockMode ? '2px solid #10b981' : '2px solid transparent',
+              backgroundColor: isMockMode ? '#d1fae5' : 'transparent'
+            }"
+            :title="isMockMode ? '목업 모드 ON' : '목업 모드 OFF'"
+          >
+            <i :class="isMockMode ? 'fas fa-toggle-on' : 'fas fa-toggle-off'" :style="{ 
+              fontSize: '16px',
+              transition: 'all 0.3s ease'
+            }"></i>
+            <span v-if="isMockMode" class="mock-indicator" style="position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></span>
+          </button>
+          
+          <!-- 알람 버튼 -->
           <button class="btn btn-sm" style="position: relative; width: 40px; height: 40px; padding: 0;">
             <i class="fas fa-bell"></i>
             <span class="notification-count" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; min-width: 16px; text-align: center;">3</span>
@@ -274,7 +265,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '/src/stores/userStore.js'
+import { useUserStore } from '/src/util/userStore.js'
 import Board from './board/Board.vue'
 import QnA from './qna/QnA.vue'
 import Dashboard from './dashboard/dashboard.vue'
@@ -478,20 +469,108 @@ const showConfirmAlert = (message, title = '확인', onConfirm = null, onCancel 
 // ============================================
 
 /**
- * 마이페이지 이동
+ * 마이페이지 이동 (비밀번호 확인 후)
  */
 const handleMyPage = () => {
-  console.log('마이페이지 이동')
+  console.log('마이페이지 접근 시도')
   // 프로필 메뉴 닫기
   sidebarProfileMenuOpen.value = false
   
-  // 토스트 메시지 표시
-  toast.info('마이페이지 기능은 준비 중입니다.', {
-    title: '알림'
+  // 비밀번호 확인 팝업 표시
+  showPasswordConfirmPopup()
+}
+
+/**
+ * 비밀번호 확인 팝업
+ */
+const showPasswordConfirmPopup = () => {
+  Swal.fire({
+    title: '마이페이지 접근',
+    text: '보안을 위해 비밀번호를 입력해주세요.',
+    input: 'password',
+    inputPlaceholder: '현재 비밀번호를 입력하세요',
+    inputAttributes: {
+      autocapitalize: 'off',
+      autocorrect: 'off'
+    },
+    showCancelButton: true,
+    confirmButtonText: '확인',
+    cancelButtonText: '취소',
+    confirmButtonColor: '#3b82f6',
+    cancelButtonColor: '#6b7280',
+    allowOutsideClick: false,
+    allowEscapeKey: true,
+    showLoaderOnConfirm: true,
+    preConfirm: async (password) => {
+      if (!password) {
+        Swal.showValidationMessage('비밀번호를 입력해주세요.')
+        return false
+      }
+      
+      // 목업모드일 때는 항상 성공 처리
+      if (isMockMode.value) {
+        console.log('🔧 목업모드: 비밀번호 검증 성공 처리')
+        return true
+      }
+      
+      try {
+        // 비밀번호 검증 API 호출
+        const response = await api.post('/api/user/verifyPassword', {
+          userId: userStore.userId,
+          password: password
+        })
+        
+        if (response?.body?.success) {
+          return true
+        } else {
+          Swal.showValidationMessage('비밀번호가 올바르지 않습니다.')
+          return false
+        }
+      } catch (error) {
+        console.error('비밀번호 검증 실패:', error)
+        Swal.showValidationMessage('비밀번호 확인 중 오류가 발생했습니다.')
+        return false
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      console.log('비밀번호 확인 성공 - 마이페이지 접근 허용')
+      toast.success('비밀번호가 확인되었습니다.', {
+        title: '인증 성공'
+      })
+      
+      // TODO: 마이페이지 컴포넌트/팝업 표시
+      showMyPageContent()
+    } else {
+      console.log('비밀번호 확인 취소')
+    }
   })
+}
+
+/**
+ * 마이페이지 콘텐츠 표시 (비밀번호 확인 후)
+ */
+const showMyPageContent = () => {
+  console.log('마이페이지 콘텐츠 표시 - 설정 화면으로 이동')
   
-  // TODO: 마이페이지 컴포넌트 구현 후 라우팅 처리
-  // router.push('/learning/mypage')
+  // 설정 메뉴 객체를 직접 생성하여 선택
+  const settingsMenu = {
+    menuId: 999,
+    parentId: null,
+    name: 'settings',
+    title: '마이페이지',
+    icon: 'fas fa-user-cog',
+    description: '개인 설정 및 계정 관리',
+    component: 'Settings',
+    orderNo: 999,
+    isActive: 'Y'
+  }
+  
+  // 설정 메뉴 선택
+  selectMenu(settingsMenu)
+  toast.success('마이페이지에 접근했습니다.', {
+    title: '접근 성공'
+  })
 }
 
 /**
@@ -566,7 +645,7 @@ onMounted(() => {
 .sidebar-header {
   padding: 20px;
   border-bottom: 1px solid var(--border-light);
-  min-height: 80px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -618,6 +697,9 @@ onMounted(() => {
   background: var(--bg-white);
   border-bottom: 1px solid var(--border-light);
   padding: 24px 32px;
+  height: 90px;
+  display: flex;
+  align-items: center;
 }
 
 .content-wrapper {

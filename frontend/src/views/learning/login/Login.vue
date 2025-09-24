@@ -77,7 +77,7 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '/src/stores/userStore.js'
+import { useUserStore } from '/src/util/userStore.js'
 import SignupPopup from '/src/views/learning/login/SignupPopup.vue'
 import Swal from 'sweetalert2'
 import api from '/src/util/api.js'
