@@ -78,10 +78,10 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '/src/util/userStore.js'
-import SignupPopup from '/src/views/learning/login/SignupPopup.vue'
+import SignupPopup from '/src/views/admin/login/SignupPopup.vue'
 import Swal from 'sweetalert2'
 import api from '/src/util/api.js'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'LearningLogin',
@@ -164,7 +164,7 @@ export default {
         
         // 메인 페이지로 이동
         setTimeout(() => {
-          router.push('/learning/main')
+          router.push('/admin/main')
         }, 1500)
         
       } catch (error) {
@@ -211,7 +211,7 @@ export default {
           
           // 메인 페이지로 이동
           setTimeout(() => {
-            router.push('/learning/main')
+            router.push('/admin/main')
           }, 1500)
         } else {
           throw new Error('API 응답이 올바르지 않습니다.')

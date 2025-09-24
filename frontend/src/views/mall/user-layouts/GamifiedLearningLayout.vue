@@ -248,7 +248,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 const userLevel = ref(15)
 const currentXP = ref(1250)

@@ -223,7 +223,7 @@
 </template>
 
 <script setup>
-import '../common.css'
+import '/src/styles/admin/main.css'
 </script>
 
 <style scoped>

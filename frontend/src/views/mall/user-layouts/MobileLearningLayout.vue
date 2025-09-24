@@ -277,7 +277,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 const menuOpen = ref(false)
 const showSearch = ref(false)

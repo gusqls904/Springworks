@@ -149,7 +149,7 @@ import { getUserMockData, deleteUserMockData } from '../../mock/userMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
 import UserPopup from './UserPopup.vue'
 import Swal from 'sweetalert2'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'Users',

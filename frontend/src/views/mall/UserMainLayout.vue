@@ -285,7 +285,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import './common.css'
+import '/src/styles/admin/main.css'
 
 const sidebarCollapsed = ref(false)
 const selectedMenu = ref({ name: 'dashboard' })
@@ -348,7 +348,7 @@ const selectMenu = (menu) => {
 }
 
 const openLayout = (layout) => {
-  const layoutUrl = `/learning/user-layouts/${layout.name}`
+  const layoutUrl = `/admin/user-layouts/${layout.name}`
   window.open(layoutUrl, '_blank')
 }
 </script>

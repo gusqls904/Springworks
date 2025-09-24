@@ -198,7 +198,7 @@ import { api } from '/src/util/api.js'
 import { getQnAMockData } from '../../mock/qnaMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
 import Swal from 'sweetalert2'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'QnA',

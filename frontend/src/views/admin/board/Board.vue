@@ -119,7 +119,7 @@ import { useRouter } from 'vue-router'
 import { api } from '/src/util/api.js'
 import { getBoardMockData } from '../../mock/boardMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'LearningBoard',
@@ -252,14 +252,14 @@ export default {
      * 상세보기 이동
      */
     const goToDetail = (boardId) => {
-      router.push(`/learning/board/${boardId}`)
+      router.push(`/admin/board/${boardId}`)
     }
 
     /**
      * 글쓰기 이동
      */
     const goToWrite = () => {
-      router.push('/learning/board/write')
+      router.push('/admin/board/write')
     }
 
 

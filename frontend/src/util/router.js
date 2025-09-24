@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '/src/views/Home.vue'
-import learningRoutes from './routes/learningRouter.js'
+import adminRoutes from './routes/adminRouter.js'
 import mallRoutes from './routes/mallRouter.js'
 
 const routes = [
@@ -10,8 +10,8 @@ const routes = [
     component: Home
   },
   
-  // Learning Routes
-  ...learningRoutes,
+  // Admin Routes
+  ...adminRoutes,
   
   // Mall Routes
   ...mallRoutes

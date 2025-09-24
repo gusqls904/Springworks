@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './util/router.js'
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
-import "./styles/popup-custom.css" // Custom CSS import
+import "./styles/admin/popup.css" // Custom CSS import
 
 const app = createApp(App)
 const pinia = createPinia()

@@ -127,7 +127,7 @@ import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
 import { apiCall } from '/src/util/api.js'
 import Swal from 'sweetalert2'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'SignupPopup',
