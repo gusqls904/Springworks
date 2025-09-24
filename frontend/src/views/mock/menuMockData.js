@@ -82,19 +82,6 @@ export const menuMockData = [
     isActive: 'Y',
     createdDttm: '2025-09-22 08:34:35.000',
     updatedDttm: '2025-09-22 08:34:35.000'
-  },
-  {
-    menuId: 7,
-    parentId: null,
-    name: 'settings',
-    title: '설정',
-    icon: 'fas fa-cog',
-    description: '시스템을 설정하세요',
-    component: 'Settings',
-    orderNo: 7,
-    isActive: 'Y',
-    createdDttm: '2025-09-22 08:34:35.000',
-    updatedDttm: '2025-09-22 08:34:35.000'
   }
 ]
 
