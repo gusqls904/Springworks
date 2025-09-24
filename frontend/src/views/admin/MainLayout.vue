@@ -278,7 +278,7 @@ import { getMenuMockData } from '/src/views/mock/menuMockData.js'
 import { useToast } from "vue-toastification"
 import Swal from 'sweetalert2'
 import api from '/src/util/api.js'
-import './common.css'
+import '/src/styles/admin/main.css'
   
 // Router 초기화
 const router = useRouter()
@@ -317,7 +317,6 @@ const components = {
 const user = computed(() => ({
   id: userStore.userId,
   name: userStore.userName,
-  email: 'hong@example.com', // 이메일은 별도로 관리
   role: userStore.roleName
 }))
 
@@ -587,7 +586,7 @@ const handleLogout = () => {
       // 선택된 메뉴 정보 제거
       localStorage.removeItem('selectedMenu')
       // 로그인 페이지로 이동
-      router.push('/learning/login')
+      router.push('/admin/login')
     },
     () => {
       console.log('로그아웃 취소')

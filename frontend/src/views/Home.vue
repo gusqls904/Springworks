@@ -51,7 +51,7 @@ export default {
 
     const goToLearningLogin = () => {
       // 강의 로그인 이동
-      router.push('/learning/login')
+      router.push('/admin/login')
     }
 
     return {

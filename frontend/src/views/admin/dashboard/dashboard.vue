@@ -82,7 +82,7 @@
 
 <script>
 import { ref } from 'vue'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'Dashboard',

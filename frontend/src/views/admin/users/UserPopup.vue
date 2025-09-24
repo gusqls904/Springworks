@@ -146,7 +146,7 @@ import { apiCall } from '/src/util/api.js'
 import { updateUserMockData, createUserMockData, roleListMockData } from '../../mock/userMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
 import Swal from 'sweetalert2'
-import '../common.css'
+import '/src/styles/admin/main.css'
 
 export default {
   name: 'UserPopup',
