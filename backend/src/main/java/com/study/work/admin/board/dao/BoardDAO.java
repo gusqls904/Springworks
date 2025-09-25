@@ -1,6 +1,6 @@
-package com.study.work.learning.board.dao;
+package com.study.work.admin.board.dao;
 
-import com.study.work.learning.board.dto.BoardDTO;
+import com.study.work.admin.board.dto.BoardDTO;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 

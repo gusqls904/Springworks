@@ -33,7 +33,7 @@
         <!-- ========================================== -->
         <!-- MyBatis 쿼리 로그 -->
         <!-- ========================================== -->
-        <Logger name="com.study.work.learning.board.dao" 
+        <Logger name="com.study.work.admin.board.dao"
                 level="debug" 
                 additivity="false">
             <AppenderRef ref="Console"/>

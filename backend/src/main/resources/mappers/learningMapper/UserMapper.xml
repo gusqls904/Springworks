@@ -3,52 +3,52 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-<mapper namespace="com.study.work.learning.user.dao.UserDAO">
+<mapper namespace="com.study.work.admin.user.dao.UserDAO">
 
 	<select id="selectCountUserId" parameterType="java.lang.String" resultType="java.lang.Integer">
-		/**
-		* SQL ID : com.study.work.learning.user.dao.UserDAO.selectCountUserId
-		* SQL 명: 사용자 아이디 개수 조회
-		*/
-		SELECT COUNT(*)
-		FROM TB_USER
-		WHERE USER_ID = #{userId}
-	</select>
+        /**
+        * SQL ID : com.study.work.admin.user.dao.UserDAO.selectCountUserId
+        * SQL 명: 사용자 아이디 개수 조회
+        */
+        SELECT COUNT(*)
+        FROM TB_USER
+        WHERE USER_ID = #{userId}
+    </select>
 
-    <select id="getRoleList" resultType="com.study.work.learning.user.dto.RoleDTO">
-    	/**
-		* SQL ID : com.study.work.learning.user.dao.UserDAO.getRoleList
-		* SQL 명: 역할 목록 조회
-		*/
+    <select id="getRoleList" resultType="com.study.work.admin.user.dto.RoleDTO">
+        /**
+        * SQL ID : com.study.work.admin.user.dao.UserDAO.getRoleList
+        * SQL 명: 역할 목록 조회
+        */
         SELECT ROLE_ID as roleId
-        	 , ROLE_NAME as roleName
+        , ROLE_NAME as roleName
         FROM TB_ROLE
     </select>
 
-	<insert id="insertUser" parameterType="com.study.work.learning.user.dto.UserDTO">
-		/**
-		* SQL ID : com.study.work.learning.user.dao.UserDAO.insertUser
-		* SQL 명: 사용자 등록
-		*/
-		INSERT INTO TB_USER (
-		      USER_ID
-		    , USER_NAME
-		    , PASSWORD
-		    , EMAIL
-		    , ROLE_ID
-		    , CREATED_DTTM
-		    , UPDATED_DTTM
-		    , IS_ACTIVE
-	    ) VALUES (
-		      #{userId}
-		    , #{userName}
-		    , #{password}
-		    , #{email}
-		    , #{roleId}
-		    , CURRENT_TIMESTAMP()
-		    , CURRENT_TIMESTAMP()
-		    , #{isActive}
-		)
-	</insert>
+	<insert id="insertUser" parameterType="com.study.work.admin.user.dto.UserDTO">
+        /**
+        * SQL ID : com.study.work.admin.user.dao.UserDAO.insertUser
+        * SQL 명: 사용자 등록
+        */
+        INSERT INTO TB_USER (
+        USER_ID
+        , USER_NAME
+        , PASSWORD
+        , EMAIL
+        , ROLE_ID
+        , CREATED_DTTM
+        , UPDATED_DTTM
+        , IS_ACTIVE
+        ) VALUES (
+        #{userId}
+        , #{userName}
+        , #{password}
+        , #{email}
+        , #{roleId}
+        , CURRENT_TIMESTAMP()
+        , CURRENT_TIMESTAMP()
+        , #{isActive}
+        )
+    </insert>
 	
 </mapper>

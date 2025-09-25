@@ -1,4 +1,4 @@
-package com.study.work.learning.user.dto;
+package com.study.work.admin.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

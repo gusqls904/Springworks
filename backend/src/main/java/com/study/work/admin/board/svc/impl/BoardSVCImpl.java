@@ -1,8 +1,8 @@
-package com.study.work.learning.board.svc.impl;
+package com.study.work.admin.board.svc.impl;
 
-import com.study.work.learning.board.dao.BoardDAO;
-import com.study.work.learning.board.dto.BoardDTO;
-import com.study.work.learning.board.svc.BoardSVC;
+import com.study.work.admin.board.dao.BoardDAO;
+import com.study.work.admin.board.dto.BoardDTO;
+import com.study.work.admin.board.svc.BoardSVC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
