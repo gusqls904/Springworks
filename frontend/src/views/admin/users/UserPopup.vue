@@ -142,7 +142,7 @@
 <script>
 import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
-import { apiCall } from '/src/util/api.js'
+import { api } from '/src/util/api.js'
 import { updateUserMockData, createUserMockData, roleListMockData } from '../../mock/userMockData.js'
 import { callApiOrMock } from '/src/util/mockConfig.js'
 import Swal from 'sweetalert2'
@@ -279,7 +279,7 @@ export default {
         
         const res = await callApiOrMock(
           // 실제 API 호출
-          () => apiCall('/user/getRoleList', {}, 'POST'),
+          () => api.post('/user/getRoleList', {}),
           // 목업 데이터 호출
           () => Promise.resolve(roleListMockData)
         )
@@ -314,7 +314,7 @@ export default {
         isChecking.value = true
         userIdChecked.value = false
 
-        const res = await apiCall('/user/checkUserId', { userId }, 'POST')
+        const res = await api.post('/user/checkUserId', { userId })
         
         const duplicate = res?.body.duplicate
         if (duplicate) {
@@ -372,7 +372,7 @@ export default {
           // 실제 API 호출
           async () => {
             const endpoint = isEditMode.value ? '/user/updateUser' : '/user/createUser'
-            return await apiCall(endpoint, userData, 'POST')
+            return await api.post(endpoint, userData)
           },
           // 목업 데이터 호출
           async () => {

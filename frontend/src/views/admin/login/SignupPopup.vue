@@ -125,7 +125,7 @@
 <script>
 import { ref, computed, watch } from 'vue'
 import BasePopup from '../../../components/BasePopup.vue'
-import { apiCall } from '/src/util/api.js'
+import { api } from '/src/util/api.js'
 import Swal from 'sweetalert2'
 import '/src/styles/admin/main.css'
 
@@ -198,7 +198,7 @@ export default {
     const getRoleList = async () => {
       try {
         isLoadingRoles.value = true
-        const res = await apiCall('/user/getRoleList', {}, 'POST')
+        const res = await api.post('/user/getRoleList', {})
 
           roleList.value = res?.body.map(role => ({
             value: role.roleId,
@@ -230,7 +230,7 @@ export default {
         isChecking.value = true
         userIdChecked.value = false
 
-        const res = await apiCall('/user/checkUserId', { userId }, 'POST')
+        const res = await api.post('/user/checkUserId', { userId })
         
         const duplicate = res?.body.duplicate
         if (duplicate) {
@@ -273,7 +273,7 @@ export default {
           isActive: '1'
         }
         
-        const response = await apiCall('/user/signup', signupData, 'POST')
+        const response = await api.post('/user/signup', signupData)
         
         emit('signup', response)
         showAlert('회원가입이 완료되었습니다.', 'success')
