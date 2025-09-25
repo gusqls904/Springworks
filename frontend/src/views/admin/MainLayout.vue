@@ -339,9 +339,9 @@ const getMenuList = async () => {
   menuLoading.value = true
   
   try {
-    console.log('📡 API 호출 시도: /api/common/getMenuList')
+    console.log('📡 API 호출 시도: /common/getMenuList')
     // 실제 API 호출 (목업 버튼과 무관)
-    const response = await api.post('/api/common/getMenuList', {})
+    const response = await api.post('/common/getMenuList', {})
     console.log('📥 API 응답:', response)
     
     if (response?.body?.menuList) {
