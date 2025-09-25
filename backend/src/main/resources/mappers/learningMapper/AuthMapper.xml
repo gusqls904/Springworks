@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.work.admin.auth.dao.AuthDAO">
+
+    <select id="login" parameterType="map" resultType="map">
+        SELECT
+        u.USER_ID      AS userId,
+        u.USER_NAME    AS userName,
+        u.ROLE_ID      AS roleId,
+        r.ROLE_NAME    AS roleName
+        FROM TB_USER u
+        LEFT JOIN TB_ROLE r ON u.ROLE_ID = r.ROLE_ID
+        WHERE u.USER_ID = #{userId}
+        AND u.PASSWORD = #{password}
+        AND u.IS_ACTIVE = 1
+    </select>
+
+
+</mapper>

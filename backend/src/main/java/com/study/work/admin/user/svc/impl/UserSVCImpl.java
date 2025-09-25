@@ -1,12 +1,12 @@
-package com.study.work.learning.user.svc.impl;
+package com.study.work.admin.user.svc.impl;
 
-import com.study.work.learning.user.dto.RoleDTO;
+import com.study.work.admin.user.dto.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.study.work.learning.user.dao.UserDAO;
-import com.study.work.learning.user.dto.UserDTO;
-import com.study.work.learning.user.svc.UserSVC;
+import com.study.work.admin.user.dao.UserDAO;
+import com.study.work.admin.user.dto.UserDTO;
+import com.study.work.admin.user.svc.UserSVC;
 
 import java.util.List;
 

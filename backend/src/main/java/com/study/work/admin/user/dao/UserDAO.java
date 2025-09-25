@@ -1,10 +1,10 @@
-package com.study.work.learning.user.dao;
+package com.study.work.admin.user.dao;
 
 
-import com.study.work.learning.user.dto.RoleDTO;
+import com.study.work.admin.user.dto.RoleDTO;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.study.work.learning.user.dto.UserDTO;
+import com.study.work.admin.user.dto.UserDTO;
 
 import java.util.List;
 

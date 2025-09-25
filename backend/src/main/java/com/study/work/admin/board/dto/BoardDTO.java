@@ -1,4 +1,4 @@
-package com.study.work.learning.board.dto;
+package com.study.work.admin.board.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

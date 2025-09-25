@@ -1,18 +1,16 @@
-package com.study.work.learning.user.ctl;
+package com.study.work.admin.user.ctl;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.study.work.common.dto.CommonResponseDTO;
-import com.study.work.learning.user.dto.RoleDTO;
+import com.study.work.admin.user.dto.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.study.work.learning.user.dto.UserDTO;
-import com.study.work.learning.user.svc.UserSVC;
+import com.study.work.admin.user.dto.UserDTO;
+import com.study.work.admin.user.svc.UserSVC;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
