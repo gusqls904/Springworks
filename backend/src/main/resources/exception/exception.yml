@@ -13,3 +13,7 @@ exception:
     code: "40400001"
     desc: "조회 결과가 없습니다."
     status: "FAIL"
+  user_not_found:
+    code: "40400002"
+    desc: "사용자 조회 결과가 없습니다."
+    status: "FAIL"

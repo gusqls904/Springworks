@@ -23,15 +23,12 @@ public class AuthCTL {
     @PostMapping("/login")
     public CommonResponseDTO<Map<String, Object>> login(@RequestBody Map<String, String> reqMap) {
 
+    	// 요청 데이터 DTO로 변경
         String userId = reqMap.get("userId");
         String password = reqMap.get("password");
-
-
+        
         Map<String, Object> result = authSVC.login(userId, password);
-//        if (result == null || result.isEmpty()) {
-//            return new CommonResponseDTO<>(null, 401, "40100001", "아이디 또는 비밀번호가 올바르지 않습니다.");
-//        }
-
+        
         return new CommonResponseDTO<>(result);
     }
 
