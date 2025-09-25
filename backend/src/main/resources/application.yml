@@ -45,5 +45,5 @@ server:
   
   
 error:
-  codes-file: classpath:/exception/error-codes.yml
+  codes-file: classpath:/exception/exception.yml
   
