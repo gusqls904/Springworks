@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/common")
@@ -22,8 +24,14 @@ public class MenuCTL {
 
     @Operation(summary = "시스템 목록 조회", description = "대시보드, 게시판, QnA 등을 조회하는 API")
     @PostMapping("/getMenuList")
-    public CommonResponseDTO<List<MenuDTO>> getMenus() {
+    public CommonResponseDTO<Map<String, Object>> getMenuList() {
         List<MenuDTO> menuList = menuSVC.getMenuList();
-        return new CommonResponseDTO<>(menuList);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("menuList", menuList);
+
+        return new CommonResponseDTO<>(body);
     }
 }
+
+
