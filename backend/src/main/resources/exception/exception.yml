@@ -9,6 +9,7 @@ exception:
     code: "50000000"
     desc: "정의되지 않은 오류가 발생했습니다."
     status: "FAIL"
+
   data_not_found:
     code: "40400001"
     desc: "조회 결과가 없습니다."
@@ -17,11 +18,22 @@ exception:
     code: "40400002"
     desc: "사용자 조회 결과가 없습니다."
     status: "FAIL"
+
   invalid_credentials:
-    code: "40100003"
+    code: "40100001"
     desc: "아이디 또는 비밀번호가 올바르지 않습니다."
     status: "FAIL"
+  invalid_credentials_count:
+    code: "40100002"
+    desc: "아이디 또는 비밀번호가 올바르지 않습니다. ({0}/5)"
+    status: "FAIL"
+
+  login_attempt_exceeded:
+    code: "40300001"
+    desc: "로그인 5회 이상 실패하여 계정이 잠겼습니다."
+    status: "FAIL"
   account_locked:
-    code: "40300003"
+    code: "40300002"
     desc: "잠긴 계정입니다."
     status: "FAIL"
+
