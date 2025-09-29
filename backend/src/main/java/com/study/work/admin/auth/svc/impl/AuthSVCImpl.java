@@ -17,25 +17,40 @@ public class AuthSVCImpl implements AuthSVC {
 
     @Override
     public LoginResDTO login(String userId, String password) throws BizException{
-    	
-    	LoginResDTO loginResDTO = authDAO.selectLoginInfo(userId, password);
-    	
-    	/**
-    	 *  예외처리 목록
-    	 *  /backend/src/main/resources/exception/exception.yml
-    	 */
-    	if(loginResDTO == null) {
-    		throw new BizException("user_not_found");
-    	}
-    	
-    	if(!loginResDTO.getPassword().equals(password)) {
-    		throw new BizException("invalid_credentials");
-    	}
-    	
-    	if(loginResDTO.getIsActive().equals("0")) {
-    		throw new BizException("account_locked");
-    	}
-    	
+
+        LoginResDTO loginResDTO = authDAO.selectLoginInfo(userId,password);
+
+        /**
+         *  예외처리 목록
+         *  /backend/src/main/resources/exception/exception.yml
+         */
+        if(loginResDTO == null) {
+            throw new BizException("user_not_found");
+        }
+
+        if(loginResDTO.getIsActive().equals("0")) {
+            throw new BizException("account_locked");
+        }
+
+        // 비밀번호 검증
+        if (!loginResDTO.getPassword().equals(password)) {
+            int loginFailCnt = loginResDTO.getLoginFailCnt() + 1;
+            authDAO.updateFailCnt(userId, loginFailCnt);  // 실패 횟수 증가
+
+            if (loginFailCnt >= 5) {
+                authDAO.updateIsActive(userId,"0");  // 계정 잠금 처리
+                throw new BizException("account_locked");
+            }
+
+            throw new BizException("invalid_credentials"); // 5회 미만이면 단순 실패
+        }
+
+        // 로그인 성공 → 실패 카운트 초기화
+        if (loginResDTO.getLoginFailCnt() > 0) {
+            authDAO.updateFailCnt(userId, 0);
+        }
+
         return loginResDTO;
+
     }
 }

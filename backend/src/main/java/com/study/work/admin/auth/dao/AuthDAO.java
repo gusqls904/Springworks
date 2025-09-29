@@ -11,5 +11,7 @@ public interface AuthDAO {
      */
 	LoginResDTO selectLoginInfo(String userId, String password);
 
+    void updateFailCnt(String userId, int loginFailCnt);
 
+    void updateIsActive(String userId, String isActive);
 }

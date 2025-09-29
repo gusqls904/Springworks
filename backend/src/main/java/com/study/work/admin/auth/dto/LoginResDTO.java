@@ -25,4 +25,7 @@ public class LoginResDTO {
     @Schema(description = "활성 여부 (0: 비활성, 1: 활성)", example = "1")
     private String isActive;
 
+    @Schema(description = "로그인 실패 횟수", example = "0")
+    private int loginFailCnt;
+
 }
