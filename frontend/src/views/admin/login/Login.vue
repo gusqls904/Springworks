@@ -115,70 +115,10 @@ export default {
         return
       }
 
-      // 로그인 방식 선택 컨펌 팝업
-      const result = await Swal.fire({
-        title: '로그인 방식 선택',
-        text: '어떤 방식으로 로그인하시겠습니까?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '실제 API 통신',
-        cancelButtonText: '목업 데이터 사용',
-        reverseButtons: true,
-        allowOutsideClick: false,
-        allowEscapeKey: true
-      })
-
-      if (result.dismiss === Swal.DismissReason.cancel) {
-        // 목업 데이터 사용
-        await loginWithMockData()
-      } else if (result.isConfirmed) {
-        // 실제 API 통신
-        await loginWithApi()
-      }
+      // 실제 API 통신
+      await loginWithApi()
     }
 
-    // 목업 데이터로 로그인
-    const loginWithMockData = async () => {
-      try {
-        isLoading.value = true
-        
-        // 목업 로그인 데이터
-        const mockUserData = {
-          userId: loginForm.value.userId,
-          userName: '홍길동',
-          roleId: 'ADMIN',
-          roleName: '관리자'
-        }
-        
-        // Pinia store에 사용자 정보 저장
-        userStore.setUser(mockUserData)
-        
-        // 성공 알림
-        Swal.fire({
-          title: '로그인 성공 (목업)',
-          text: '목업 데이터로 로그인되었습니다!',
-          icon: 'success',
-          timer: 1500,
-          showConfirmButton: false
-        })
-        
-        // 메인 페이지로 이동
-        setTimeout(() => {
-          router.push('/admin/main')
-        }, 1500)
-        
-      } catch (error) {
-        console.error('목업 로그인 오류:', error)
-        Swal.fire({
-          title: '로그인 실패',
-          text: '목업 로그인 중 오류가 발생했습니다.',
-          icon: 'error',
-          confirmButtonText: '확인'
-        })
-      } finally {
-        isLoading.value = false
-      }
-    }
 
     // 실제 API로 로그인
     const loginWithApi = async () => {
@@ -202,8 +142,8 @@ export default {
           
           // 성공 알림
           Swal.fire({
-            title: '로그인 성공 (API)',
-            text: 'API 통신으로 로그인되었습니다!',
+            title: '로그인 성공',
+            text: '로그인되었습니다!',
             icon: 'success',
             timer: 1500,
             showConfirmButton: false

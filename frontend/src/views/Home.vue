@@ -5,19 +5,16 @@
         <div class="login_content">
           <h2 class="login_title eng">Welcome to Project.</h2>
           <p class="login_subtitle">
-            멀티 서비스 웹 플랫폼<br>
-            온라인쇼핑몰 / 강의시스템 개발 프로젝트!
+            온라인 강의 웹 플랫폼<br>
+            강의시스템 개발 프로젝트!
           </p>
 
           <div class="login_social">
-            <div class="login_kakao">
-              <a class="login_btn kakao mov03" @click="goToMallLogin">
-                온라인 쇼핑몰
-              </a>
-            </div>
-
+            <a class="login_btn kakao mov03" @click="goToMallLogin">
+              온라인 강의
+            </a>
             <a class="login_btn mov03" @click="goToLearningLogin">
-              강의 시스템
+              관리자 로그인
             </a>
           </div>
         </div>

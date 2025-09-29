@@ -13,7 +13,6 @@ let useMockData = false
 export const setMockMode = (enabled) => {
   useMockData = enabled
   localStorage.setItem('useMockData', enabled.toString())
-  console.log(`🔧 목업 모드: ${enabled ? '활성화' : '비활성화'}`)
 }
 
 /**
@@ -35,7 +34,6 @@ export const isMockMode = () => {
 export const toggleMockMode = () => {
   const newMode = !isMockMode()
   setMockMode(newMode)
-  console.log(`🔧 목업 모드: ${newMode ? '활성화' : '비활성화'}`)
   return newMode
 }
 
@@ -47,10 +45,8 @@ export const toggleMockMode = () => {
  */
 export const callApiOrMock = async (apiFunction, mockFunction) => {
   if (isMockMode()) {
-    console.log('🔧 목업 데이터 사용')
     return await mockFunction()
   } else {
-    console.log('🌐 실제 API 호출')
     return await apiFunction()
   }
 }
@@ -65,8 +61,6 @@ if (savedSetting !== null) {
 window.toggleMockMode = () => {
   const newMode = !isMockMode()
   setMockMode(newMode)
-  console.log(`목업 모드가 ${newMode ? '활성화' : '비활성화'}되었습니다.`)
-  console.log('페이지를 새로고침하여 변경사항을 적용하세요.')
 }
 
 window.getMockStatus = () => {
@@ -81,7 +75,3 @@ import { getMenuMockData } from '/src/views/mock/menuMockData.js'
 
 // getMenuMockData 함수 re-export
 export { getMenuMockData }
-
-console.log('🚀 목업 설정 시스템 초기화됨')
-console.log('📊 현재 상태:', window.getMockStatus())
-console.log('💡 사용법: toggleMockMode() - 목업 모드 전환')
