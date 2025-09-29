@@ -50,5 +50,64 @@
         , #{isActive}
         )
     </insert>
+
+
+    <!-- 회원 목록 조회 -->
+    <select id="getUserList" resultType="map">
+        SELECT
+        U.USER_SEQ    AS userSeq,
+        U.USER_ID     AS userId,
+        U.USER_NAME   AS userName,
+        U.EMAIL       AS email,
+        U.ROLE_ID     AS roleId,
+        R.ROLE_NAME   AS roleName,
+        U.CREATED_DTTM AS createdDttm,
+        CASE WHEN U.IS_ACTIVE = 'Y' THEN '활성' ELSE '비활성' END AS isActive
+        FROM TB_USER U
+        LEFT JOIN TB_ROLE R ON U.ROLE_ID = R.ROLE_ID
+        <where>
+            <if test="searchType == 'userId'">
+                AND U.USER_ID LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchType == 'userName'">
+                AND U.USER_NAME LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchType == 'email'">
+                AND U.EMAIL LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchType == 'all' and searchQuery != null and searchQuery != ''">
+                AND (U.USER_ID LIKE CONCAT('%', #{searchQuery}, '%')
+                OR U.USER_NAME LIKE CONCAT('%', #{searchQuery}, '%')
+                OR U.EMAIL LIKE CONCAT('%', #{searchQuery}, '%'))
+            </if>
+        </where>
+        ORDER BY U.USER_SEQ ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+
+    <!-- 전체 회원 수 -->
+    <select id="getUserCount" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_USER U
+        LEFT JOIN TB_ROLE R ON U.ROLE_ID = R.ROLE_ID
+        <where>
+            <if test="searchType == 'userId'">
+                AND U.USER_ID LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchType == 'userName'">
+                AND U.USER_NAME LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchType == 'email'">
+                AND U.EMAIL LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+            <if test="searchType == 'all' and searchQuery != null and searchQuery != ''">
+                AND (U.USER_ID LIKE CONCAT('%', #{searchQuery}, '%')
+                OR U.USER_NAME LIKE CONCAT('%', #{searchQuery}, '%')
+                OR U.EMAIL LIKE CONCAT('%', #{searchQuery}, '%'))
+            </if>
+        </where>
+    </select>
+
 	
 </mapper>
