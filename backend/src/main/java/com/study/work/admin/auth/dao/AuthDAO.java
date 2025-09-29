@@ -1,7 +1,7 @@
 package com.study.work.admin.auth.dao;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.Map;
+import com.study.work.admin.auth.dto.LoginResDTO;
 
 @Mapper
 public interface AuthDAO {
@@ -9,7 +9,7 @@ public interface AuthDAO {
     /**
      * 아이디로 사용자 조회
      */
-    Map<String, Object> login(String userId, String password);
+	LoginResDTO login(String userId, String password);
 
 
 }

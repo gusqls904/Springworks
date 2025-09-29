@@ -69,33 +69,33 @@ async function apiRequest(url, options = {}) {
     // ❌ 5. HTTP 오류 처리 (Body 유무에 따른 구분)
     // ============================================
     if (!response.ok) {
-      debugger
-      let errorMessage = `HTTP error! status: ${response.status}`
-      let errorType = 'UNKNOWN_ERROR'
       
-      try {
+      // let errorMessage = `HTTP error! status: ${response.status}`
+      // let errorType = 'UNKNOWN_ERROR'
+      
+      // try {
         // 응답 body가 있는지 확인
         const responseText = await response.text()
         
         if (responseText) {
-          const errorData = JSON.parse(responseText);
-          throw error
+          const errorData = JSON.parse(responseText)
           
-        } else {
-          // 응답 body가 없음 = WAS에 도달하지 못함 (필터/인터셉터) 또는 서버 오류
-          // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
-          const error = new Error(`HTTP error! status: ${response.status}`)
-          error.type = 'HTTP_ERROR'
-          error.status = response.status
-          throw error
-        }
-      } catch (responseError) {
-        // 응답 자체를 읽을 수 없음 = 네트워크 오류
-        // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
-        const error = new Error('네트워크 연결을 확인해주세요.')
-        error.type = 'NETWORK_ERROR'
-        error.status = 0
-        throw error
+          throw errorData
+      //   } else {
+      //     // 응답 body가 없음 = WAS에 도달하지 못함 (필터/인터셉터) 또는 서버 오류
+      //     // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
+      //     const error = new Error(`HTTP error! status: ${response.status}`)
+      //     error.type = 'HTTP_ERROR'
+      //     error.status = response.status
+      //     throw error
+      //   }
+      // } catch (responseError) {
+      //   // 응답 자체를 읽을 수 없음 = 네트워크 오류
+      //   // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
+      //   const error = new Error('네트워크 연결을 확인해주세요.')
+      //   error.type = 'NETWORK_ERROR'
+      //   error.status = 0
+      //   throw error
       }
     }
 
@@ -124,12 +124,12 @@ async function apiRequest(url, options = {}) {
     // ============================================
     // 🚨 7. 에러 로깅 및 재throw
     // ============================================
-    console.error('API 요청 에러:', {
-      url: fullUrl,
-      method: options.method || 'GET',
-      error: error.message,
-      timestamp: new Date().toISOString()
-    })
+    // console.error('API 요청 에러:', {
+    //   url: fullUrl,
+    //   method: options.method || 'GET',
+    //   error: error.message,
+    //   timestamp: new Date().toISOString()
+    // })
     throw error
   }
 }
