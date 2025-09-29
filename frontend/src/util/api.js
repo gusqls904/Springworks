@@ -69,18 +69,15 @@ async function apiRequest(url, options = {}) {
     // ❌ 5. HTTP 오류 처리 (Body 유무에 따른 구분)
     // ============================================
     if (!response.ok) {
-      debugger
-      let errorMessage = `HTTP error! status: ${response.status}`
-      let errorType = 'UNKNOWN_ERROR'
       
       try {
         // 응답 body가 있는지 확인
         const responseText = await response.text()
         
         if (responseText) {
-          const errorData = JSON.parse(responseText);
-          throw error
+          const errorData = JSON.parse(responseText)
           
+          throw errorData
         } else {
           // 응답 body가 없음 = WAS에 도달하지 못함 (필터/인터셉터) 또는 서버 오류
           // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
@@ -95,7 +92,13 @@ async function apiRequest(url, options = {}) {
         const error = new Error('네트워크 연결을 확인해주세요.')
         error.type = 'NETWORK_ERROR'
         error.status = 0
-        throw error
+        
+        // responseError에 값이 없을 경우 error 데이터를 리턴
+        if (!responseError || !responseError.message) {
+          throw error
+        } else {
+          throw responseError
+        }
       }
     }
 
@@ -124,12 +127,12 @@ async function apiRequest(url, options = {}) {
     // ============================================
     // 🚨 7. 에러 로깅 및 재throw
     // ============================================
-    console.error('API 요청 에러:', {
-      url: fullUrl,
-      method: options.method || 'GET',
-      error: error.message,
-      timestamp: new Date().toISOString()
-    })
+    // console.error('API 요청 에러:', {
+    //   url: fullUrl,
+    //   method: options.method || 'GET',
+    //   error: error.message,
+    //   timestamp: new Date().toISOString()
+    // })
     throw error
   }
 }

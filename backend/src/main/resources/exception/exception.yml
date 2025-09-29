@@ -17,3 +17,11 @@ exception:
     code: "40400002"
     desc: "사용자 조회 결과가 없습니다."
     status: "FAIL"
+  invalid_credentials:
+    code: "40100003"
+    desc: "아이디 또는 비밀번호가 올바르지 않습니다."
+    status: "FAIL"
+  account_locked:
+    code: "40300003"
+    desc: "잠긴 계정입니다."
+    status: "FAIL"

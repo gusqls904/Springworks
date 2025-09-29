@@ -221,7 +221,7 @@ export default {
         console.error('API 로그인 오류:', error)
         Swal.fire({
           title: '로그인 실패',
-          text: '아이디 또는 비밀번호가 올바르지 않습니다.',
+          text: error.message,
           icon: 'error',
           confirmButtonText: '확인'
         })
