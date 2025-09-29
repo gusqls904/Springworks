@@ -70,10 +70,7 @@ async function apiRequest(url, options = {}) {
     // ============================================
     if (!response.ok) {
       
-      // let errorMessage = `HTTP error! status: ${response.status}`
-      // let errorType = 'UNKNOWN_ERROR'
-      
-      // try {
+      try {
         // 응답 body가 있는지 확인
         const responseText = await response.text()
         
@@ -81,21 +78,27 @@ async function apiRequest(url, options = {}) {
           const errorData = JSON.parse(responseText)
           
           throw errorData
-      //   } else {
-      //     // 응답 body가 없음 = WAS에 도달하지 못함 (필터/인터셉터) 또는 서버 오류
-      //     // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
-      //     const error = new Error(`HTTP error! status: ${response.status}`)
-      //     error.type = 'HTTP_ERROR'
-      //     error.status = response.status
-      //     throw error
-      //   }
-      // } catch (responseError) {
-      //   // 응답 자체를 읽을 수 없음 = 네트워크 오류
-      //   // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
-      //   const error = new Error('네트워크 연결을 확인해주세요.')
-      //   error.type = 'NETWORK_ERROR'
-      //   error.status = 0
-      //   throw error
+        } else {
+          // 응답 body가 없음 = WAS에 도달하지 못함 (필터/인터셉터) 또는 서버 오류
+          // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
+          const error = new Error(`HTTP error! status: ${response.status}`)
+          error.type = 'HTTP_ERROR'
+          error.status = response.status
+          throw error
+        }
+      } catch (responseError) {
+        // 응답 자체를 읽을 수 없음 = 네트워크 오류
+        // 일단 모든 에러를 Vue 컴포넌트로 throw (나중에 특정 status만 예외 처리)
+        const error = new Error('네트워크 연결을 확인해주세요.')
+        error.type = 'NETWORK_ERROR'
+        error.status = 0
+        
+        // responseError에 값이 없을 경우 error 데이터를 리턴
+        if (!responseError || !responseError.message) {
+          throw error
+        } else {
+          throw responseError
+        }
       }
     }
 

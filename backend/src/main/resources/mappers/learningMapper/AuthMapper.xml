@@ -5,17 +5,20 @@
 
 <mapper namespace="com.study.work.admin.auth.dao.AuthDAO">
 
-    <select id="login" parameterType="map" resultType="com.study.work.admin.auth.dto.LoginResDTO">
-        SELECT
-        u.USER_ID      AS userId,
-        u.USER_NAME    AS userName,
-        u.PASSWORD    AS password,
-        u.ROLE_ID      AS roleId,
-        r.ROLE_NAME    AS roleName,
-        u.IS_ACTIVE    AS isActive
-        FROM TB_USER u
-        LEFT JOIN TB_ROLE r ON u.ROLE_ID = r.ROLE_ID
-        WHERE u.USER_ID = #{userId}
+    <select id="selectLoginInfo" parameterType="map" resultType="com.study.work.admin.auth.dto.LoginResDTO">
+    	/**
+        * SQL ID : com.study.work.admin.auth.dao.AuthDAO.selectLoginInfo
+        * SQL 명: 로그인 정보조회
+        */
+		SELECT U.USER_ID
+		     , U.USER_NAME
+			 , U.PASSWORD
+			 , U.ROLE_ID
+			 , R.ROLE_NAME
+			 , U.IS_ACTIVE
+		FROM TB_USER U 
+		LEFT JOIN TB_ROLE R ON U.ROLE_ID = R.ROLE_ID
+		WHERE U.USER_ID = #{userId}
     </select>
 
 

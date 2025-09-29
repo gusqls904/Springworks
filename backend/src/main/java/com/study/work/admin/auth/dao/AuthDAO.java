@@ -9,7 +9,7 @@ public interface AuthDAO {
     /**
      * 아이디로 사용자 조회
      */
-	LoginResDTO login(String userId, String password);
+	LoginResDTO selectLoginInfo(String userId, String password);
 
 
 }
