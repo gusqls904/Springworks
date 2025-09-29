@@ -62,7 +62,7 @@
         U.ROLE_ID     AS roleId,
         R.ROLE_NAME   AS roleName,
         U.CREATED_DTTM AS createdDttm,
-        CASE WHEN U.IS_ACTIVE = 'Y' THEN '활성' ELSE '비활성' END AS isActive
+        CASE WHEN U.IS_ACTIVE = '1' THEN '활성' ELSE '비활성' END AS isActive
         FROM TB_USER U
         LEFT JOIN TB_ROLE R ON U.ROLE_ID = R.ROLE_ID
         <where>

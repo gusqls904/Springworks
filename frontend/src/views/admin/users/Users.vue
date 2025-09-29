@@ -199,7 +199,7 @@ export default {
         // API 호출 또는 목업 데이터 사용
         const res = await callApiOrMock(
           // 실제 API 호출
-          () => api.post('/api/user/getUserList', requestData),
+          () => api.post('/user/getUserList', requestData),
           // 목업 데이터 호출
           () => getUserMockData(requestData)
         )
@@ -306,7 +306,7 @@ export default {
         await callApiOrMock(
           // 실제 API 호출
           async () => {
-            return await api.post('/api/user/deleteUser', { userId: userId })
+            return await api.post('/user/deleteUser', { userId: userId })
           },
           // 목업 데이터 호출
           async () => {
