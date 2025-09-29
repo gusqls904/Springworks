@@ -16,7 +16,7 @@ public class AuthSVCImpl implements AuthSVC {
 
 
     @Override
-    public LoginResDTO login(String userId, String password) {
+    public LoginResDTO login(String userId, String password) throws BizException{
     	
     	LoginResDTO loginResDTO = authDAO.selectLoginInfo(userId, password);
     	
