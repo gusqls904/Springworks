@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.work.admin.menu.dao.MenuDAO">
+
+    <!-- 메뉴 전체 조회 -->
+    <select id="getMenuList" resultType="com.study.work.admin.menu.dto.MenuDTO">
+        SELECT
+        MENU_ID      AS menuId,
+        PARENT_ID    AS parentId,
+        NAME         AS name,
+        TITLE        AS title,
+        ICON         AS icon,
+        DESCRIPTION  AS description,
+        COMPONENT    AS component,
+        ORDER_NO     AS orderNo,
+        IS_ACTIVE    AS isActive,
+        CREATED_DTTM AS createdDttm,
+        UPDATED_DTTM AS updatedDttm
+        FROM TB_MENU
+        WHERE IS_ACTIVE='Y'
+    </select>
+
+</mapper>

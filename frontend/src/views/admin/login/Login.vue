@@ -186,7 +186,7 @@ export default {
         isLoading.value = true
         
         // 실제 로그인 API 호출
-        const response = await api.post('/api/auth/login', loginForm.value)
+        const response = await api.post('/auth/login', loginForm.value)
         
         if (response?.body) {
           // API 응답에서 사용자 정보 추출

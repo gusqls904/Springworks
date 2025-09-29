@@ -16,10 +16,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonResultDTO {
 
-    private int httpStatusCode = HttpStatus.OK.value();   // HTTP 상태 코드
-    private String code = "20000000";                     // 내부 비즈니스 코드
-    private String message = "정상 처리 되었습니다.";         // 사용자 메시지
-    private String detailMessage;                         // 상세 메시지 (디버깅용)
+    // 상수 정의
+    public static final String DEFAULT_SUCCESS_CODE = "20000000";
+    public static final String DEFAULT_SUCCESS_MESSAGE = "정상 처리 되었습니다.";
+    public static final String DEFAULT_ERROR_CODE = "50000000";
+    public static final String DEFAULT_ERROR_MESSAGE = "예상치 못한 오류가 발생했습니다.";
+    public static final String SUCCESS_STATUS = "SUCCESS";
+    public static final String FAIL_STATUS = "FAIL";
+
+    private int httpStatusCode = HttpStatus.OK.value();
+    private String code = DEFAULT_SUCCESS_CODE;
+    private String message = DEFAULT_SUCCESS_MESSAGE;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String status;                                // SUCCESS / FAIL 등 상태
@@ -40,7 +47,7 @@ public class CommonResultDTO {
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.code = (code != null && !code.trim().isEmpty()) ? code : DEFAULT_SUCCESS_CODE;
     }
 
     public String getMessage() {
@@ -48,15 +55,7 @@ public class CommonResultDTO {
     }
 
     public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getDetailMessage() {
-        return detailMessage;
-    }
-
-    public void setDetailMessage(String detailMessage) {
-        this.detailMessage = detailMessage;
+        this.message = (message != null && !message.trim().isEmpty()) ? message : DEFAULT_SUCCESS_MESSAGE;
     }
 
     public String getStatus() {
@@ -65,6 +64,47 @@ public class CommonResultDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    // 편의 메서드 추가
+    public boolean isSuccess() {
+        return SUCCESS_STATUS.equals(this.status);
+    }
+
+    public boolean isFail() {
+        return FAIL_STATUS.equals(this.status);
+    }
+
+    // 정적 팩토리 메서드 추가
+    public static CommonResultDTO success() {
+        CommonResultDTO result = new CommonResultDTO();
+        result.setStatus(SUCCESS_STATUS);
+        return result;
+    }
+
+    public static CommonResultDTO success(String message) {
+        CommonResultDTO result = new CommonResultDTO();
+        result.setMessage(message);
+        result.setStatus(SUCCESS_STATUS);
+        return result;
+    }
+
+    public static CommonResultDTO error(String code, String message) {
+        CommonResultDTO result = new CommonResultDTO();
+        result.setCode(code);
+        result.setMessage(message);
+        result.setStatus(FAIL_STATUS);
+        result.setHttpStatusCode(HttpStatus.BAD_REQUEST.value());
+        return result;
+    }
+
+    public static CommonResultDTO error(String code, String message, int httpStatusCode) {
+        CommonResultDTO result = new CommonResultDTO();
+        result.setCode(code);
+        result.setMessage(message);
+        result.setStatus(FAIL_STATUS);
+        result.setHttpStatusCode(httpStatusCode);
+        return result;
     }
 
     public HttpHeaders getHttpHeaders() {
