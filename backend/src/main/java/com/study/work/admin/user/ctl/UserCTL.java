@@ -56,6 +56,36 @@ public class UserCTL {
     }
 
 
+    @Operation(summary = "회원 목록 조회", description = "검색 조건 및 페이징에 따른 회원 목록 조회")
+    @PostMapping("/getUserList")
+    public CommonResponseDTO<Map<String, Object>> getUserList(@RequestBody Map<String, Object> reqMap) {
+        /*String page=reqMap.get("page");
+        String size=reqMap.get("size");*/
+        int page = (int) reqMap.getOrDefault("page", 1);
+        int size = (int) reqMap.getOrDefault("size", 10);
+
+        String searchType = (String) reqMap.getOrDefault("searchType", "all");
+        String searchQuery = (String) reqMap.getOrDefault("searchQuery", "");
+
+        Map<String,Object> result=new HashMap<>();
+
+        // 서비스 호출
+        List<Map<String, Object>> userList = userSVC.getUserList(page, size, searchType, searchQuery);
+        int totalElements = userSVC.getUserCount(searchType, searchQuery);
+        int totalPages = (int) Math.ceil((double) totalElements / size);
+
+        // 응답 body 구성
+        Map<String, Object> body = new HashMap<>();
+        body.put("userList", userList);
+
+        Map<String, Object> pagination = new HashMap<>();
+        pagination.put("totalElements", totalElements);
+        pagination.put("totalPages", totalPages);
+
+        body.put("pagination", pagination);
+
+        return new CommonResponseDTO<>(body);
+    }
 
 
 }
