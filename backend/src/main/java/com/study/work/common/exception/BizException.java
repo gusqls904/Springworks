@@ -13,6 +13,11 @@ public class BizException extends RuntimeException {
         this(ExceptionInfoConfig.getInstance().getExceptionInfoResult(key));
     }
 
+    // YAML key + 동적 값 기반 생성자
+    public BizException(String key, Object... args) {
+        this(ExceptionInfoConfig.getInstance().getResultDto(key, args));
+    }
+
     // CommonResultDTO 기반 생성자
     private BizException(CommonResultDTO result) {
         super(result.getMessage());
