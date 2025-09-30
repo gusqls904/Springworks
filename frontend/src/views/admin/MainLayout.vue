@@ -274,6 +274,7 @@ import Users from './users/Users.vue'
 import Courses from './courses/Courses.vue'
 import Settings from './settings/Settings.vue'
 import { isMockMode as getMockMode, toggleMockMode } from '/src/util/mockConfig.js'
+import { getMenuMockData } from '/src/views/mock/menuMockData.js'
 import { useToast } from "vue-toastification"
 import Swal from 'sweetalert2'
 import api from '/src/util/api.js'
@@ -334,23 +335,58 @@ const menuLoading = ref(true)
  * 메뉴 목록 조회
  */
 const getMenuList = async () => {
+  console.log('🚀 getMenuList 시작')
   menuLoading.value = true
   
   try {
+    console.log('📡 API 호출 시도: /common/getMenuList')
+    // 실제 API 호출 (목업 버튼과 무관)
     const response = await api.post('/common/getMenuList', {})
+    console.log('📥 API 응답:', response)
     
     if (response?.body?.menuList) {
+      console.log('✅ API에서 메뉴 목록 받음:', response.body.menuList)
       menus.value = response.body.menuList.sort((a, b) => a.orderNo - b.orderNo)
       restoreSelectedMenu()
       menuLoading.value = false
+      console.log('✅ 메뉴 목록 조회 성공 (실제 API)')
+      toast.success('메뉴가 성공적으로 로드되었습니다.')
     } else {
-      throw new Error('조회 중 오류가 발생했습니다.')
+      console.log('❌ API 응답에 menuList가 없음:', response)
+      throw new Error('API 응답에 menuList가 없습니다')
     }
   } catch (error) {
-    menuLoading.value = false
-    toast.error(error.message, {
-      title: '오류'
-    })
+    console.error('❌ 메뉴 목록 조회 실패:', error)
+    console.log('🔄 목업 데이터로 폴백 시도...')
+    
+    try {
+      // API 실패 시 목업 데이터로 폴백
+      console.log('📦 getMenuMockData 호출')
+      const mockResponse = await getMenuMockData({})
+      console.log('📥 목업 응답:', mockResponse)
+      
+      if (mockResponse?.body?.menuList) {
+        console.log('✅ 목업에서 메뉴 목록 받음:', mockResponse.body.menuList)
+        menus.value = mockResponse.body.menuList.sort((a, b) => a.orderNo - b.orderNo)
+        console.log('📋 menus.value 설정됨:', menus.value)
+        restoreSelectedMenu()
+        menuLoading.value = false
+        
+        toast.warning('서버 연결에 실패하여 기본 메뉴를 표시합니다.', {
+          title: '연결 오류'
+        })
+        console.log('✅ 목업 데이터로 폴백 성공')
+      } else {
+        console.log('❌ 목업 응답에 menuList가 없음:', mockResponse)
+        throw new Error('목업 응답에 menuList가 없습니다')
+      }
+    } catch (mockError) {
+      console.error('❌ 목업 데이터 로드도 실패:', mockError)
+      menuLoading.value = false
+      toast.error('메뉴를 불러올 수 없습니다. 페이지를 새로고침해주세요.', {
+        title: '오류'
+      })
+    }
   }
 }
 
