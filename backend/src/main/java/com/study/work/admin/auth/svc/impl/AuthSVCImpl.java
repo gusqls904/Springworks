@@ -39,10 +39,10 @@ public class AuthSVCImpl implements AuthSVC {
 
             if (loginFailCnt >= 5) {
                 authDAO.updateIsActive(userId,"0");  // 계정 잠금 처리
-                throw new BizException("account_locked");
+                throw new BizException("login_attempt_exceeded");
             }
 
-            throw new BizException("invalid_credentials"); // 5회 미만이면 단순 실패
+            throw new BizException("invalid_credentials_count", loginFailCnt); // 5회 미만이면 단순 실패
         }
 
         // 로그인 성공 → 실패 카운트 초기화
