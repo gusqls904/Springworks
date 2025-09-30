@@ -4,15 +4,20 @@ spring:
       url: jdbc:mariadb://svc.sel3.cloudtype.app:30748/STUDY?serverTimezone=UTC&characterEncoding=utf8&allowMultiQueries=true&autoReconnect=true&socketTimeout=30000
       username: STUDY
       password: STUDY1!
+  
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.MariaDBDialect
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true  # SQL 쿼리 출력 활성화
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    database-platform: org.hibernate.dialect.MariaDBDialect
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        show_sql: true  # SQL 쿼리 출력 활성화
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
@@ -31,12 +36,15 @@ logging:
     org.hibernate.SQL: debug                    # SQL 쿼리 출력
     org.hibernate.type.descriptor.sql.BasicBinder: trace  # 바인딩 파라미터 출력
     
-    # MyBatis 쿼리 로그
-    com.study.work.learning.board.dao: debug   # Board 매퍼 쿼리 로그
+    # MyBatis 쿼리 로그 (간소화)
     org.mybatis: debug                         # MyBatis 전체 로그
+    org.apache.ibatis.session.SqlSessionUtils: error  # SqlSession 로그 숨김
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: warn  # 트랜잭션 로그 숨김
+    com.zaxxer.hikari: warn                   # HikariCP 로그 숨김
     
     # 프로젝트 로그
     com.study.work: debug                      # 프로젝트 전체 로그 레벨
+    com.study.work.common.aspect: info        # HTTP 로깅 AOP
     
     # Spring Framework 로그 (필요시 주석 해제)
     # org.springframework.web: debug
