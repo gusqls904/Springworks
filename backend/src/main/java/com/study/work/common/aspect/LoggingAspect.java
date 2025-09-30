@@ -116,7 +116,8 @@ public class LoggingAspect {
 
             String requestBody = extractRequestBody(joinPoint);
 
-            log.info("───────────────────────────── [HTTP REQUEST] ─────────────────────────────");
+            log.info("───────────────────────────── [ REST API ] ─────────────────────────────");
+            log.info("[HTTP REQUEST]");
             log.info("[TIME] {}", LocalDateTime.now().format(formatter));
             log.info("[CLIENT] {}", clientIp);
             log.info("[METHOD] {}", method);
@@ -130,8 +131,8 @@ public class LoggingAspect {
                 log.info("[BODY] {}", requestBody);
             }
             
-            log.info("──────────────────────────────────────────────────────────────────────────");
-
+            log.info(" ");
+            
         } catch (Exception e) {
             log.error("HTTP request logging error", e);
         }
@@ -139,7 +140,7 @@ public class LoggingAspect {
 
     private void logHttpResponse(Object result, long duration) {
         try {
-            log.info("───────────────────────────── [HTTP RESPONSE] ─────────────────────────────");
+            log.info("[HTTP RESPONSE]");
             log.info("[TIME] {}", LocalDateTime.now().format(formatter));
             log.info("[DURATION] {} ms", duration);
             
@@ -167,7 +168,7 @@ public class LoggingAspect {
 
     private void logHttpError(Exception e, long duration) {
         try {
-            log.info("───────────────────────────── [HTTP ERROR] ─────────────────────────────");
+            log.info("[HTTP ERROR]");
             log.info("[TIME] {}", LocalDateTime.now().format(formatter));
             log.info("[DURATION] {} ms", duration);
             
@@ -217,11 +218,11 @@ public class LoggingAspect {
     // ========================================
     
     private void logDatabaseStart() {
-        log.info("───────────────────────────── [DB] ─────────────────────────────");
+        log.info("[DB]");
     }
     
     private void logDatabaseEnd() {
-        log.info("──────────────────────────────────────────────────────────────────────────");
+        log.info(" ");
     }
 
     // ========================================
