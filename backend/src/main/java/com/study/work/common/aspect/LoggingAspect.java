@@ -170,10 +170,45 @@ public class LoggingAspect {
             log.info("───────────────────────────── [HTTP ERROR] ─────────────────────────────");
             log.info("[TIME] {}", LocalDateTime.now().format(formatter));
             log.info("[DURATION] {} ms", duration);
-            log.info("[ERROR] {}", e.getMessage());
+            
+            // 에러 정보를 JSON 형태로 출력
+            String errorJson = createErrorJson(e);
+            log.info("[ERROR] {}", errorJson);
+            
             log.info("──────────────────────────────────────────────────────────────────────────");
         } catch (Exception ex) {
             log.error("HTTP error logging error", ex);
+        }
+    }
+    
+    private String createErrorJson(Exception e) {
+        try {
+            Map<String, Object> errorInfo = new HashMap<>();
+            
+            if (e instanceof com.study.work.common.exception.BizException) {
+                com.study.work.common.exception.BizException bizEx = (com.study.work.common.exception.BizException) e;
+                errorInfo.put("type", "BizException");
+                errorInfo.put("code", bizEx.getCode());
+                errorInfo.put("message", bizEx.getMessage());
+                errorInfo.put("status", bizEx.getStatus());
+            } else {
+                errorInfo.put("type", e.getClass().getSimpleName());
+                errorInfo.put("message", e.getMessage());
+                
+                // 스택 트레이스 정보 추가
+                StackTraceElement[] stackTrace = e.getStackTrace();
+                if (stackTrace.length > 0) {
+                    Map<String, Object> location = new HashMap<>();
+                    location.put("class", stackTrace[0].getClassName());
+                    location.put("method", stackTrace[0].getMethodName());
+                    location.put("line", stackTrace[0].getLineNumber());
+                    errorInfo.put("location", location);
+                }
+            }
+            
+            return objectMapper.writeValueAsString(errorInfo);
+        } catch (Exception ex) {
+            return "{\"type\":\"Error\",\"message\":\"" + e.getMessage() + "\"}";
         }
     }
 

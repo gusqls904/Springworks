@@ -18,9 +18,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BizException.class)
     public ResponseEntity<CommonResultDTO> handleBizException(BizException ex, WebRequest request) {
-        String requestUri = request.getDescription(false).replace("uri=", "");
-        log.warn("비즈니스 예외 발생 - URI: {}, Code: {}, Message: {}", 
-                requestUri, ex.getCode(), ex.getMessage());
         
         HttpStatus httpStatus = determineHttpStatus(ex.getCode());
         CommonResultDTO result = CommonResultDTO.error(ex.getCode(), ex.getMessage(), httpStatus.value());
