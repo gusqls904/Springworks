@@ -19,7 +19,32 @@
         <!-- MyBatis 쿼리 로그 -->
         <!-- ========================================== -->
         <Logger name="org.mybatis" 
-                level="debug" 
+                level="off" 
+                additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <Logger name="com.study.work..dao" 
+                level="info" 
+                additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <!-- 구체적인 DAO 로거들 (와일드카드보다 우선순위 높음) -->
+        <Logger name="com.study.work.admin.auth.dao" 
+                level="info" 
+                additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <Logger name="com.study.work.admin.board.dao" 
+                level="info" 
+                additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <Logger name="com.study.work.learning.board.dao" 
+                level="info" 
                 additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>

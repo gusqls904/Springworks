@@ -32,8 +32,9 @@ logging:
     # 기본 로그 레벨
     root: info
     
-    # MyBatis 쿼리 로그 (간소화)
-    org.mybatis: debug                         # MyBatis 전체 로그
+    # # MyBatis 쿼리 로그 (간소화)
+    # org.mybatis: off                           # MyBatis 내부 로그 완전 차단
+    # com.study.work..dao: info                  # 모든 DAO 패키지 쿼리 로그를 INFO로
     
     # 프로젝트 로그
     com.study.work: debug                      # 프로젝트 전체 로그 레벨
