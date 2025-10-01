@@ -4,11 +4,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -34,6 +36,9 @@ public class LoggingAspect {
             .setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    
+    @Value("${sensitive.fields}")
+    private List<String> sensitiveFields;
 
     // ========================================
     // AOP 메서드들
@@ -272,12 +277,13 @@ public class LoggingAspect {
     }
 
     private boolean isSensitiveParameter(String parameterName) {
+        if (sensitiveFields == null || sensitiveFields.isEmpty()) {
+            return false;
+        }
+        
         String lowerName = parameterName.toLowerCase();
-        return lowerName.contains("password") || 
-               lowerName.contains("pwd") || 
-               lowerName.contains("secret") || 
-               lowerName.contains("token") ||
-               lowerName.contains("key");
+        return sensitiveFields.stream()
+                .anyMatch(field -> lowerName.contains(field.toLowerCase()));
     }
     
     private String maskSensitiveData(String json) {
@@ -285,18 +291,18 @@ public class LoggingAspect {
             // 디버깅을 위한 로그 추가
             log.debug("Original JSON: {}", json);
             
-            // isSensitiveParameter 메서드와 동일한 로직으로 JSON 필드 마스킹
-            String[] sensitiveFields = {"password", "pwd", "secret", "token", "key"};
+            if (sensitiveFields == null || sensitiveFields.isEmpty()) {
+                return json;
+            }
+            
             String result = json;
             
             for (String field : sensitiveFields) {
-                if (isSensitiveParameter(field)) {
-                    // 해당 필드의 값을 ****로 마스킹
-                    String pattern = "\"" + field + "\"\\s*:\\s*\"[^\"]*\"";
-                    String replacement = "\"" + field + "\":\"****\"";
-                    result = result.replaceAll(pattern, replacement);
-                    log.debug("Masked field '{}': {} -> {}", field, pattern, replacement);
-                }
+                // 해당 필드의 값을 ****로 마스킹
+                String pattern = "\"" + field + "\"\\s*:\\s*\"[^\"]*\"";
+                String replacement = "\"" + field + "\":\"****\"";
+                result = result.replaceAll(pattern, replacement);
+                log.debug("Masked field '{}': {} -> {}", field, pattern, replacement);
             }
             
             log.debug("Masked JSON: {}", result);
