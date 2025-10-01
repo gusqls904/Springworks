@@ -2,6 +2,7 @@ package com.study.work.admin.user.svc.impl;
 
 import com.study.work.admin.user.dto.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.study.work.admin.user.dao.UserDAO;
@@ -17,9 +18,13 @@ public class UserSVCImpl implements UserSVC{
 	@Autowired
 	UserDAO userDAO;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 	@Override
 	public void signup(UserDTO userDto) {
-		
+        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(encodedPassword);
 		userDAO.insertUser(userDto);
 	}
 

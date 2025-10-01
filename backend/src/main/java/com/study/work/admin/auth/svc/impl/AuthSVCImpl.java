@@ -1,6 +1,7 @@
 package com.study.work.admin.auth.svc.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.study.work.admin.auth.dao.AuthDAO;
@@ -13,6 +14,9 @@ public class AuthSVCImpl implements AuthSVC {
 
     @Autowired
     private AuthDAO authDAO;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -33,7 +37,7 @@ public class AuthSVCImpl implements AuthSVC {
         }
 
         // 비밀번호 검증
-        if (!loginResDTO.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, loginResDTO.getPassword())) {
             int loginFailCnt = loginResDTO.getLoginFailCnt() + 1;
             authDAO.updateFailCnt(userId, loginFailCnt);  // 실패 횟수 증가
 
@@ -42,7 +46,8 @@ public class AuthSVCImpl implements AuthSVC {
                 throw new BizException("login_attempt_exceeded");
             }
 
-            throw new BizException("invalid_credentials_count", loginFailCnt); // 5회 미만이면 단순 실패
+            // 남은 횟수 UI에 전달할 수 있도록 failCnt 인자 같이 넘김
+            throw new BizException("invalid_credentials_count", loginFailCnt);
         }
 
         // 로그인 성공 → 실패 카운트 초기화
