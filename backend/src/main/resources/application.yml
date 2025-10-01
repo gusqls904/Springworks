@@ -53,14 +53,5 @@ error:
 
 # 민감한 정보 마스킹 설정
 sensitive:
-  fields:
-    - password
-    - pwd
-    - secret
-    - token
-    - key
-    - authorization
-    - auth
-    - credential
-    - passwd
+  fields: password,pwd,secret,token,key,authorization,auth,credential,passwd
   

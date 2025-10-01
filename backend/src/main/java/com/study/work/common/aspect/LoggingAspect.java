@@ -37,7 +37,7 @@ public class LoggingAspect {
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     
-    @Value("${sensitive.fields}")
+    @Value("#{'${sensitive.fields}'.split(',')}")
     private List<String> sensitiveFields;
 
     // ========================================
