@@ -218,7 +218,7 @@ public class LoggingAspect {
     // ========================================
     
     private void logDatabaseStart() {
-        log.info("[DB]");
+        log.info("[SQL]");
     }
     
     private void logDatabaseEnd() {
@@ -235,7 +235,7 @@ public class LoggingAspect {
             for (Object arg : args) {
                 if (arg != null && !isPrimitiveOrWrapper(arg.getClass())) {
                     String json = objectMapper.writeValueAsString(arg);
-                    return json;
+                    return maskSensitiveData(json);
                 }
             }
         } catch (Exception e) {
@@ -278,5 +278,32 @@ public class LoggingAspect {
                lowerName.contains("secret") || 
                lowerName.contains("token") ||
                lowerName.contains("key");
+    }
+    
+    private String maskSensitiveData(String json) {
+        try {
+            // 디버깅을 위한 로그 추가
+            log.debug("Original JSON: {}", json);
+            
+            // isSensitiveParameter 메서드와 동일한 로직으로 JSON 필드 마스킹
+            String[] sensitiveFields = {"password", "pwd", "secret", "token", "key"};
+            String result = json;
+            
+            for (String field : sensitiveFields) {
+                if (isSensitiveParameter(field)) {
+                    // 해당 필드의 값을 ****로 마스킹
+                    String pattern = "\"" + field + "\"\\s*:\\s*\"[^\"]*\"";
+                    String replacement = "\"" + field + "\":\"****\"";
+                    result = result.replaceAll(pattern, replacement);
+                    log.debug("Masked field '{}': {} -> {}", field, pattern, replacement);
+                }
+            }
+            
+            log.debug("Masked JSON: {}", result);
+            return result;
+        } catch (Exception e) {
+            log.debug("Sensitive data masking error: {}", e.getMessage());
+            return json;
+        }
     }
 }
